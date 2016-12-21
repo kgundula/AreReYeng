@@ -1,4 +1,4 @@
-<LinearLayout android:id="@+id/root_layout"
+<ScrollView android:id="@+id/root_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,11 +12,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="za.co.gundula.app.arereyeng.ui.LoginActivity"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -109,7 +104,5 @@
                     android:layout_height="wrap_content"
                     android:text="@string/button_create_account" />
             </LinearLayout>
-
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+</ScrollView>
