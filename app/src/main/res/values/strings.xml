@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">AreReYeng</string>
+
+    <!-- Strings related to menu and navigation drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="share">Share</string>
+    <string name="slideshow">Slideshow</string>
+    <string name="gallery">Gallery</string>
+    <string name="tools">Tools</string>
+    <string name="communicate">Communicate</string>
+    <string name="send">Send</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="username">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_up_short">Sign Up</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+
+    <string name="button_create_account">Sign Up</string>
+    <string name="text_dont_have_account">Don\'t have an account?</string>
+    <string name="text_account_signin">Already have an account?</string>
+
+    <string name="areyeng_img_logo">Are Yeng Logo</string>
+    <string name="action_sign_in_google">Sign In with Google</string>
+    <string name="action_logout">Logout</string>
+
+
+    <!-- Instructions and Loading Text -->
+    <string name="progress_dialog_loading">Loading…</string>
+    <string name="progress_dialog_authenticating_with_firebase">Authenticating with Firebase…</string>
+    <string name="progress_dialog_creating_user_with_firebase">Attempting to create account…</string>
+    <string name="progress_dialog_check_inbox">Please wait..</string>
+    <string name="progress_dialog_login">Signing In</string>
+
+    <!-- Errors -->
+    <string name="dialog_title_error">Error</string>
+    <string name="error_message_failed_sign_in_no_network">There was a problem with the network connection.\nAre you sure you\'re connected to the internet?</string>
+
+    <string name="log_error_invalid_provider">"Invalid provider: "</string>
+    <string name="log_error_failed_to_change_password">"Failed to change the password: "</string>
+
+    <string name="error_invalid_email_not_valid">%s is not a valid email</string>
+    <string name="error_read_terms_and_condition">Please read Terms and Conditions</string>
+    <string name="error_message_email_issue">There was an error with your email; please check that you entered it correctly.</string>
+    <string name="error_email_taken">The email is already taken.</string>
+    <string name="error_invalid_password_not_valid">Please enter a password that is at least 6 characters long.</string>
+    <string name="error_cannot_be_empty">This cannot be empty.</string>
+    <string name="error_invalid_contact_number">This contact is invalid.</string>
+
+
+    <!-- Google Errors -->
+    <string name="google_error_recoverable_oauth_error">"Recoverable Google OAuth error: "</string>
+    <string name="google_error_google_play_services_not_available">Google Play Services are not available.</string>
+    <string name="google_error_trying_to_connect_google_api">Trying to connect to Google API</string>
+    <string name="google_error_auth_with_google">"Error authenticating with Google: "</string>
+    <string name="google_error_network_error">"Network error: "</string>
+
+
+    <!-- OAuth Format -->
+    <string name="oauth2_format">oauth2:%s</string>
+
+    <!-- Sync Adapter Authority -->
+    <string name="content_authority">areyeng.gundula.co.za</string>
+    <string name="sync_account_type">za.co.gundula.app.arereyeng.</string>
+    <string name="areyeng_map">AreYeng Map</string>
+    <string name="fare_calculator">Fare Calculator</string>
+    <string name="plan_your_journey">Plan Your Journey</string>
+    <string name="timetables">Timetables</string>
+    <string name="areyeng_cards">AreYeng Cards</string>
+    <string name="from_station">From Station</string>
+    <string name="to_station">To Station</string>
+
+
+</resources>

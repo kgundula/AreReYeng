@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "584009653838",
+    "firebase_url": "https://arereyeng.firebaseio.com",
+    "project_id": "arereyeng",
+    "storage_bucket": "arereyeng.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584009653838:android:36e370a9a5092307",
+        "android_client_info": {
+          "package_name": "za.co.gundula.app.arereyeng"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584009653838-o0olipb6kbbt7vc3jm44vj859mfddgck.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.co.gundula.app.arereyeng",
+            "certificate_hash": "500D194D68869639247965F3180A133251DEDE31"
+          }
+        },
+        {
+          "client_id": "584009653838-8dh12rv06hcjutvjmbgbq3me6fhdoe37.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIk349-wifa2LKl7iiLzmOBgAXoVVQDhQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "584009653838-8dh12rv06hcjutvjmbgbq3me6fhdoe37.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
