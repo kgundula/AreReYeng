@@ -13,7 +13,7 @@
             android:title="@string/fare_calculator" />
         <item
             android:id="@+id/nav_journey"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_journey_planner"
             android:title="@string/plan_your_journey" />
         <item
             android:id="@+id/nav_map"
