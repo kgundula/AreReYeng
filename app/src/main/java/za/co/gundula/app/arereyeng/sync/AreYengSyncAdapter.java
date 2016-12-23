@@ -35,16 +35,12 @@ public class AreYengSyncAdapter extends AbstractThreadedSyncAdapter {
         super(context, autoInitialize);
     }
 
-    public AreYengSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
-        super(context, autoInitialize, allowParallelSyncs);
-    }
-
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
 
         // Implement the actualy sync code.
         WhereIsMyTransportTokenApiClient whereIsMyTransportTokenApiClient = new WhereIsMyTransportTokenApiClient();
-        whereIsMyTransportTokenApiClient.getToken();
+        whereIsMyTransportTokenApiClient.getToken(getContext());
 
     }
 

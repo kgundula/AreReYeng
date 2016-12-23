@@ -1,5 +1,8 @@
 package za.co.gundula.app.arereyeng.rest;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -15,6 +18,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import za.co.gundula.app.arereyeng.BuildConfig;
+import za.co.gundula.app.arereyeng.Constants;
 import za.co.gundula.app.arereyeng.model.ApiToken;
 
 /**
@@ -38,7 +42,11 @@ public class WhereIsMyTransportTokenApiClient {
     private static final String client_grant_type = "grant_type";
     private static final String client_scope = "grant_type";
 
-    public void getToken() {
+    private SharedPreferences mSharedPref;
+    private SharedPreferences.Editor mSharedPrefEditor;
+
+
+    public void getToken(final Context context) {
 
         RequestBody body = new FormBody.Builder()
                 .add("Content-Type", "application/x-www-form-urlencoded")
@@ -68,11 +76,18 @@ public class WhereIsMyTransportTokenApiClient {
                 try {
                     JSONObject tokenJson = new JSONObject(responseString);
 
-                    Log.i("Ygritte", tokenJson.toString());
+                    Log.i("Ygritte", "Token String" + tokenJson.toString());
                     ApiToken apiToken = new ApiToken(tokenJson.getString("access_token"), tokenJson.getString("expires_in"), tokenJson.getString("token_type"));
                     Log.i("Ygritte : token ", apiToken.getAccess_token());
                     Log.i("Ygritte : expires", apiToken.getExpires_in());
-                    Log.i("Ygritte : toke type", apiToken.getToken_type());
+                    Log.i("Ygritte : token type", apiToken.getToken_type());
+                    mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+                    mSharedPrefEditor = mSharedPref.edit();
+
+                    mSharedPrefEditor.putString(Constants.token_type, apiToken.getToken_type()).apply();
+                    mSharedPrefEditor.putString(Constants.access_token, apiToken.getAccess_token()).apply();
+                    mSharedPrefEditor.putString(Constants.expires_in, apiToken.getExpires_in()).apply();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

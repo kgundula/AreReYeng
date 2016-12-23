@@ -35,6 +35,13 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
 
+
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".data.AreYengContentProvider"
+            android:exported="false"
+            android:syncable="true" />
+
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.AreYengAuthenticatorService">
             <intent-filter>

@@ -62,7 +62,6 @@ public class MainActivity extends BaseActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        //this.getToken();
         AreYengSyncAdapter.initializeSyncAdapter(this);
 
         updateUserDetails();
@@ -102,7 +101,7 @@ public class MainActivity extends BaseActivity
     public void getToken() {
 
         WhereIsMyTransportTokenApiClient whereIsMyTransportTokenApiClient = new WhereIsMyTransportTokenApiClient();
-        whereIsMyTransportTokenApiClient.getToken();
+        whereIsMyTransportTokenApiClient.getToken(context);
     }
 
 

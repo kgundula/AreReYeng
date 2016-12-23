@@ -15,7 +15,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -48,14 +48,11 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.password)
     EditText mPasswordView;
 
-    @BindView(R.id.login_form)
-    View mLoginFormView;
-
     @BindView(R.id.login_progress)
     View mProgressView;
 
     @BindView(R.id.root_layout)
-    LinearLayout root_layout;
+    ScrollView root_layout;
 
     private ProgressDialog mAuthProgressDialog;
     private ProgressDialog loginProgress;

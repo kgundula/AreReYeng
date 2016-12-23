@@ -76,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null) {
-                        Log.i("Ygritte", user.getUid());
+                        Log.i("Ygritte", "User UID : " + user.getUid());
                     } else {
                         SharedPreferences.Editor spe = sp.edit();
                         spe.putString(Constants.key_encoded_email, "");
