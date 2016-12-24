@@ -25,8 +25,8 @@ public class AreYengSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final String ACTION_DATA_UPDATED =
             "za.co.gundula.app.arereyeng.ACTION_DATA_UPDATED";
     // Interval at which to sync with the whereismytransport, in seconds.
-    // 60 seconds (1 minute) * 3 = 3 minutues
-    public static final int SYNC_INTERVAL = 56 * 1;
+    // 56 seconds (1 minute) * 3 = 2.8 minutues
+    public static final int SYNC_INTERVAL = 56 * 3;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 

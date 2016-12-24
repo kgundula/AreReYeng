@@ -3,7 +3,6 @@ package za.co.gundula.app.arereyeng.rest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,14 +75,10 @@ public class WhereIsMyTransportTokenApiClient {
                 try {
                     JSONObject tokenJson = new JSONObject(responseString);
 
-                    Log.i("Ygritte", "Token String" + tokenJson.toString());
                     ApiToken apiToken = new ApiToken(tokenJson.getString("access_token"), tokenJson.getString("expires_in"), tokenJson.getString("token_type"));
-                    Log.i("Ygritte : token ", apiToken.getAccess_token());
-                    Log.i("Ygritte : expires", apiToken.getExpires_in());
-                    Log.i("Ygritte : token type", apiToken.getToken_type());
                     mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
                     mSharedPrefEditor = mSharedPref.edit();
-
+                    // Save Authorisation tokens on shared preferences for faster access
                     mSharedPrefEditor.putString(Constants.token_type, apiToken.getToken_type()).apply();
                     mSharedPrefEditor.putString(Constants.access_token, apiToken.getAccess_token()).apply();
                     mSharedPrefEditor.putString(Constants.expires_in, apiToken.getExpires_in()).apply();
