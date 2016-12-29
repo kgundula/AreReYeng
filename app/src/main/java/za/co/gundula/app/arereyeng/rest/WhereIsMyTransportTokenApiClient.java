@@ -3,6 +3,7 @@ package za.co.gundula.app.arereyeng.rest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,6 +80,7 @@ public class WhereIsMyTransportTokenApiClient {
                     mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
                     mSharedPrefEditor = mSharedPref.edit();
                     // Save Authorisation tokens on shared preferences for faster access
+                    Log.i("Ygritte", apiToken.getAccess_token());
                     mSharedPrefEditor.putString(Constants.token_type, apiToken.getToken_type()).apply();
                     mSharedPrefEditor.putString(Constants.access_token, apiToken.getAccess_token()).apply();
                     mSharedPrefEditor.putString(Constants.expires_in, apiToken.getExpires_in()).apply();

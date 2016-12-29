@@ -66,13 +66,12 @@
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
+                style="@style/LoginCreateTextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textColor="@android:color/white"
-                android:text="@string/action_sign_in_short"
-                android:textStyle="bold" />
+                android:text="@string/action_sign_in_short" />
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/sign_in_button"

@@ -10,14 +10,12 @@ public class Agency {
     private String href;
     private String name;
     private String culture;
-    private String description;
 
-    public Agency(String id, String href, String name, String culture, String description) {
+    public Agency(String id, String href, String name, String culture) {
         this.id = id;
         this.href = href;
         this.name = name;
         this.culture = culture;
-        this.description = description;
     }
 
     public String getId() {
@@ -52,11 +50,4 @@ public class Agency {
         this.culture = culture;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

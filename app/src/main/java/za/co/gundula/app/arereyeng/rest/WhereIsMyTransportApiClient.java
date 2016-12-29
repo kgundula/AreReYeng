@@ -3,6 +3,7 @@ package za.co.gundula.app.arereyeng.rest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -36,6 +37,9 @@ public class WhereIsMyTransportApiClient {
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient.build())
                     .build();
+
+            Log.i("Ygriite", retrofit.baseUrl().toString());
+            Log.i("Ygriite", retrofit.toString());
         }
         return retrofit;
     }

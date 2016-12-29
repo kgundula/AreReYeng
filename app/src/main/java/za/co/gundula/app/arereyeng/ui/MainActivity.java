@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -25,8 +26,14 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import za.co.gundula.app.arereyeng.Constants;
 import za.co.gundula.app.arereyeng.R;
+import za.co.gundula.app.arereyeng.model.Agency;
+import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
+import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportTokenApiClient;
 import za.co.gundula.app.arereyeng.sync.AreYengSyncAdapter;
 import za.co.gundula.app.arereyeng.utils.CircleTransform;
@@ -46,6 +53,8 @@ public class MainActivity extends BaseActivity
     SharedPreferences mSharedPref;
     Context context;
 
+    WhereIsMyTransportApiClientInterface whereIsMyTransportApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +72,36 @@ public class MainActivity extends BaseActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         AreYengSyncAdapter.initializeSyncAdapter(this);
-
         updateUserDetails();
+        whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
+        getAgency();
+    }
+
+    public void getAgency() {
+
+        Call<Agency> call;
+        call = whereIsMyTransportApiClient.getAgency();
+        call.enqueue(new Callback<Agency>() {
+            @Override
+            public void onResponse(Call<Agency> call, Response<Agency> response) {
+
+                Agency agency = response.body();
+                Log.i("Ygritte", response.toString());
+                Log.i("Ygritte", agency.getName());
+                Log.i("Ygritte", agency.getId());
+                Log.i("Ygritte", agency.getCulture());
+                Log.i("Ygritte", agency.getHref());
+
+            }
+
+            @Override
+            public void onFailure(Call<Agency> call, Throwable t) {
+                Log.i("Ygritte", t.getLocalizedMessage().toString());
+
+            }
+        });
+
+
     }
 
     public void updateUserDetails() {
