@@ -34,7 +34,6 @@ import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.model.Agency;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
-import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportTokenApiClient;
 import za.co.gundula.app.arereyeng.sync.AreYengSyncAdapter;
 import za.co.gundula.app.arereyeng.utils.CircleTransform;
 
@@ -79,6 +78,7 @@ public class MainActivity extends BaseActivity
 
     public void getAgency() {
 
+        Log.i("Ygritte", "Get Agencies");
         Call<Agency> call;
         call = whereIsMyTransportApiClient.getAgency();
         call.enqueue(new Callback<Agency>() {
@@ -96,10 +96,11 @@ public class MainActivity extends BaseActivity
 
             @Override
             public void onFailure(Call<Agency> call, Throwable t) {
-                Log.i("Ygritte", t.getLocalizedMessage().toString());
+                Log.i("Ygritte", "" + t.getLocalizedMessage());
 
             }
         });
+        //call.execute();
 
 
     }
@@ -134,13 +135,6 @@ public class MainActivity extends BaseActivity
                     });
         }
     }
-
-    public void getToken() {
-
-        WhereIsMyTransportTokenApiClient whereIsMyTransportTokenApiClient = new WhereIsMyTransportTokenApiClient();
-        whereIsMyTransportTokenApiClient.getToken(context);
-    }
-
 
     @Override
     public void onBackPressed() {

@@ -18,7 +18,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways"
             android:layout_gravity="bottom"
             android:layout_marginLeft="@dimen/list_toolbar_side_margin"
@@ -27,10 +27,12 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
-    <com.google.android.gms.maps.MapFragment
+    <fragment
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mapFragment" />
+        tools:context=".ui.AReYengMapActivity"
+        android:id="@+id/map" />
 
 
 </android.support.design.widget.CoordinatorLayout>

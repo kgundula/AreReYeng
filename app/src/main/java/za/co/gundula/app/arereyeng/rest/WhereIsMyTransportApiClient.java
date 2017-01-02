@@ -38,8 +38,8 @@ public class WhereIsMyTransportApiClient {
                     .client(httpClient.build())
                     .build();
 
-            Log.i("Ygriite", retrofit.baseUrl().toString());
-            Log.i("Ygriite", retrofit.toString());
+            Log.i("Ygritte", retrofit.baseUrl().toString());
+            Log.i("Ygritte", retrofit.toString());
         }
         return retrofit;
     }

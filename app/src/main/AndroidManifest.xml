@@ -71,6 +71,10 @@
         <activity android:name=".ui.AReYengMapActivity" />
         <activity android:name=".ui.BusTimetableActivity" />
         <activity android:name=".ui.AReYengCardsActivity"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key" />
     </application>
 
 </manifest>

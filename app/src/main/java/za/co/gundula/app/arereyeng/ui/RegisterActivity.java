@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,7 +30,7 @@ public class RegisterActivity extends BaseActivity {
     ProgressDialog mAuthProgressDialog;
 
     @BindView(R.id.activity_register)
-    RelativeLayout rootLayout;
+    ScrollView rootLayout;
 
     @BindView(R.id.email_register)
     EditText email_register;
