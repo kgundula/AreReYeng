@@ -31,12 +31,25 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
                 AreYengContract.FaresEntry.COLUMN_MESSAGES + " TEXT NOT NULL " +
                 " );";
 
+
+        final String SQL_CREATE_AGENCY_TABLE = "CREATE TABLE " + AreYengContract.AgencyEntry.TABLE_NAME + " (" +
+                AreYengContract.AgencyEntry._ID + " INTEGER PRIMARY KEY," +
+                AreYengContract.AgencyEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
+                AreYengContract.AgencyEntry.COLUMN_HREF + " TEXT NOT NULL, " +
+                AreYengContract.AgencyEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                AreYengContract.AgencyEntry.COLUMN_CULTURE + " TEXT NOT NULL " +
+                " UNIQUE ( " + AreYengContract.AgencyEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" +
+                " );";
+
+
         db.execSQL(SQL_CREATE_FARES_TABLE);
+        db.execSQL(SQL_CREATE_AGENCY_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.FaresEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.AgencyEntry.TABLE_NAME);
         onCreate(db);
     }
 }

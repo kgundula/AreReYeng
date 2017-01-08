@@ -24,17 +24,47 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="@dimen/list_toolbar_side_margin"
             android:layout_marginRight="@dimen/list_toolbar_side_margin"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+
+    <RelativeLayout
         android:id="@+id/routes_main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_below="@+id/info_text"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true" />
+
+        <MultiAutoCompleteTextView
+            android:layout_below="@+id/from_bus_station"
+            android:layout_alignParentStart="true"
+            android:id="@+id/to_bus_station"
+            android:text="@string/end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/edit_text_padding"
+            android:paddingRight="@dimen/edit_text_padding"
+            android:paddingLeft="@dimen/edit_text_padding" />
+
+        <MultiAutoCompleteTextView
+            android:id="@+id/from_bus_station"
+            android:text="@string/start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/edit_text_padding"
+            android:paddingRight="@dimen/edit_text_padding"
+            android:paddingLeft="@dimen/edit_text_padding"
+            android:layout_below="@+id/info_text"
+            android:layout_alignParentStart="true" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

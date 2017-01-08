@@ -23,9 +23,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,6 +38,8 @@ import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.sync.AreYengSyncAdapter;
 import za.co.gundula.app.arereyeng.utils.CircleTransform;
+
+import static za.co.gundula.app.arereyeng.Constants.agency_key;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,7 +57,7 @@ public class MainActivity extends BaseActivity
     Context context;
 
     WhereIsMyTransportApiClientInterface whereIsMyTransportApiClient;
-
+    Agency[] agency;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +67,8 @@ public class MainActivity extends BaseActivity
         setSupportActionBar(toolbar);
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -73,35 +76,37 @@ public class MainActivity extends BaseActivity
         AreYengSyncAdapter.initializeSyncAdapter(this);
         updateUserDetails();
         whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
+
         getAgency();
+
     }
 
     public void getAgency() {
 
-        Log.i("Ygritte", "Get Agencies");
-        Call<Agency> call;
-        call = whereIsMyTransportApiClient.getAgency();
-        call.enqueue(new Callback<Agency>() {
+        Call<ResponseBody> call = whereIsMyTransportApiClient.getAgency();
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Agency> call, Response<Agency> response) {
-
-                Agency agency = response.body();
-                Log.i("Ygritte", response.toString());
-                Log.i("Ygritte", agency.getName());
-                Log.i("Ygritte", agency.getId());
-                Log.i("Ygritte", agency.getCulture());
-                Log.i("Ygritte", agency.getHref());
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    //[{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]}]
+                    String json_response = response.body().string();
+                    // The API returns an array instead of a json object hence we make an agenct array
+                    agency = new Gson().fromJson(json_response, Agency[].class);
+                    Log.d("Ygritte", " Response :  " + agency[0].getId());
+                    Log.d("Ygritte", " Response :  " + agency[0].getName());
+                    Log.d("Ygritte", " Response :  " + agency[0].getCulture());
+                    Log.d("Ygritte", " Response :  " + agency[0].getHref());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
             @Override
-            public void onFailure(Call<Agency> call, Throwable t) {
-                Log.i("Ygritte", "" + t.getLocalizedMessage());
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
         });
-        //call.execute();
-
 
     }
 
@@ -159,7 +164,6 @@ public class MainActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         return super.onOptionsItemSelected(item);
     }
@@ -175,7 +179,9 @@ public class MainActivity extends BaseActivity
         } else if (id == R.id.nav_journey) {
             startActivity(new Intent(MainActivity.this, JourneyPlannerActivity.class));
         } else if (id == R.id.nav_bus_timetable) {
-            startActivity(new Intent(MainActivity.this, BusTimetableActivity.class));
+            Intent intent = new Intent(MainActivity.this, BusTimetableActivity.class);
+            intent.putExtra(agency_key, agency[0]);
+            startActivity(intent);
         } else if (id == R.id.nav_map) {
             startActivity(new Intent(MainActivity.this, AReYengMapActivity.class));
         } else if (id == R.id.nav_cards) {

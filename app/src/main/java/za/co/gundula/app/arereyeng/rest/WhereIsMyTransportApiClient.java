@@ -3,7 +3,6 @@ package za.co.gundula.app.arereyeng.rest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -30,6 +29,7 @@ public class WhereIsMyTransportApiClient {
             String bearer = mSharedPref.getString(Constants.token_type, "");
 
             RetrofitInterceptor retrofitInterceptor = new RetrofitInterceptor(token, bearer);
+
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             httpClient.addNetworkInterceptor(retrofitInterceptor);
             retrofit = new Retrofit.Builder()
@@ -38,8 +38,6 @@ public class WhereIsMyTransportApiClient {
                     .client(httpClient.build())
                     .build();
 
-            Log.i("Ygritte", retrofit.baseUrl().toString());
-            Log.i("Ygritte", retrofit.toString());
         }
         return retrofit;
     }

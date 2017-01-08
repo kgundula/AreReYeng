@@ -6,6 +6,11 @@ package za.co.gundula.app.arereyeng;
 
 public class Constants {
 
+
+    public static final String agency_key = "agency";
+
+    // API AUTHORIZATION TOKEN
+
     public static final String access_token = "access_token";
     public static final String token_type = "token_type";
     public static final String bearer = "Bearer";
