@@ -1,19 +1,24 @@
 package za.co.gundula.app.arereyeng.ui;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -33,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import za.co.gundula.app.arereyeng.Constants;
 import za.co.gundula.app.arereyeng.R;
+import za.co.gundula.app.arereyeng.data.AreYengContract;
 import za.co.gundula.app.arereyeng.model.Agency;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
@@ -41,8 +47,8 @@ import za.co.gundula.app.arereyeng.utils.CircleTransform;
 
 import static za.co.gundula.app.arereyeng.Constants.agency_key;
 
-public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -54,18 +60,31 @@ public class MainActivity extends BaseActivity
     NavigationView navigationView;
 
     SharedPreferences mSharedPref;
+    SharedPreferences.Editor mSharedPrefEditor;
+
     Context context;
+    boolean is_agency_already_saved = false;
+
+    private static final int AGENCY_LOADER = 0;
+    private static final int COL_ID = 0;
+    private static final int COL_NAME = 1;
+    private static final int COL_CULTURE = 2;
+    private static final int COL_HREF = 3;
+
 
     WhereIsMyTransportApiClientInterface whereIsMyTransportApiClient;
     Agency[] agency;
+    Agency agency_intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
         ButterKnife.bind(this);
+        toolbar.setSubtitle(R.string.unofficial);
         setSupportActionBar(toolbar);
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPrefEditor = mSharedPref.edit();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -76,9 +95,14 @@ public class MainActivity extends BaseActivity
         AreYengSyncAdapter.initializeSyncAdapter(this);
         updateUserDetails();
         whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
-
-        getAgency();
-
+        is_agency_already_saved = mSharedPref.getBoolean(Constants.agency_already_saved, false);
+        if (!is_agency_already_saved) {
+            //Agency doesn't change so we only fetch once.
+            getAgency();
+        } else {
+            getSupportLoaderManager().initLoader(AGENCY_LOADER, null, this);
+            //agency_key =
+        }
     }
 
     public void getAgency() {
@@ -88,14 +112,28 @@ public class MainActivity extends BaseActivity
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    //[{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]}]
+                    //
+                    // [{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]}]
                     String json_response = response.body().string();
                     // The API returns an array instead of a json object hence we make an agenct array
                     agency = new Gson().fromJson(json_response, Agency[].class);
-                    Log.d("Ygritte", " Response :  " + agency[0].getId());
-                    Log.d("Ygritte", " Response :  " + agency[0].getName());
-                    Log.d("Ygritte", " Response :  " + agency[0].getCulture());
-                    Log.d("Ygritte", " Response :  " + agency[0].getHref());
+                    //agency_intent = agency[0];
+                    ContentValues agencyValues = new ContentValues();
+                    agencyValues.put(AreYengContract.AgencyEntry.COLUMN_ID, agency[0].getId());
+                    agencyValues.put(AreYengContract.AgencyEntry.COLUMN_NAME, agency[0].getName());
+                    agencyValues.put(AreYengContract.AgencyEntry.COLUMN_HREF, agency[0].getHref());
+                    agencyValues.put(AreYengContract.AgencyEntry.COLUMN_CULTURE, agency[0].getCulture());
+
+                    //Save Agency to database;
+                    try {
+                        getContentResolver().insert(AreYengContract.AgencyEntry.CONTENT_URI, agencyValues);
+                        getContentResolver().notifyChange(AreYengContract.AgencyEntry.CONTENT_URI, null);
+                        mSharedPrefEditor.putBoolean(Constants.agency_already_saved, true).apply();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -119,8 +157,9 @@ public class MainActivity extends BaseActivity
         String user_email = mSharedPref.getString(Constants.key_sign_up_email, "");
         drawer_email.setText(user_email);
 
-        if (image_url != null) {
-            Glide.with(context).load(image_url)
+        if (!"".equals(image_url)) {
+            Glide.with(context)
+                    .load(image_url)
                     .asBitmap()
                     .transform(new CircleTransform(context))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -175,17 +214,25 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_fares) {
-            startActivity(new Intent(MainActivity.this, BusFareActivity.class));
+            Intent intent = new Intent(MainActivity.this, BusFareActivity.class);
+            intent.putExtra(agency_key, agency_intent);
+            startActivity(intent);
         } else if (id == R.id.nav_journey) {
-            startActivity(new Intent(MainActivity.this, JourneyPlannerActivity.class));
+            Intent intent = new Intent(MainActivity.this, JourneyPlannerActivity.class);
+            intent.putExtra(agency_key, agency_intent);
+            startActivity(intent);
         } else if (id == R.id.nav_bus_timetable) {
             Intent intent = new Intent(MainActivity.this, BusTimetableActivity.class);
-            intent.putExtra(agency_key, agency[0]);
+            intent.putExtra(agency_key, agency_intent);
             startActivity(intent);
         } else if (id == R.id.nav_map) {
-            startActivity(new Intent(MainActivity.this, AReYengMapActivity.class));
+            Intent intent = new Intent(MainActivity.this, AReYengMapActivity.class);
+            intent.putExtra(agency_key, agency_intent);
+            startActivity(intent);
         } else if (id == R.id.nav_cards) {
-            startActivity(new Intent(MainActivity.this, AReYengMapActivity.class));
+            Intent intent = new Intent(MainActivity.this, AReYengMapActivity.class);
+            intent.putExtra(agency_key, agency_intent);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -202,4 +249,55 @@ public class MainActivity extends BaseActivity
     public void onConnectionSuspended(int i) {
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSupportLoaderManager().restartLoader(AGENCY_LOADER, null, this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        Uri agency_uri = AreYengContract.AgencyEntry.CONTENT_URI;
+
+        String[] AGENCY_PROJECTION = new String[]{
+                AreYengContract.AgencyEntry.COLUMN_ID,
+                AreYengContract.AgencyEntry.COLUMN_NAME,
+                AreYengContract.AgencyEntry.COLUMN_CULTURE,
+                AreYengContract.AgencyEntry.COLUMN_HREF
+        };
+
+        return new CursorLoader(
+                this,
+                agency_uri,
+                AGENCY_PROJECTION,
+                null,
+                null,
+                null
+        );
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        if (data != null && data.moveToFirst()) {
+            //Log.i("Ygritte", DatabaseUtils.dumpCursorToString(data));
+            agency_intent = new Agency(data.getString(COL_ID), data.getString(COL_NAME), data.getString(COL_CULTURE), data.getString(COL_HREF));
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+    }
 }
+
+
+

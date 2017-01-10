@@ -45,7 +45,7 @@ public class AreYengContract {
     public static final class AgencyEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FARES).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_AGENCY).build();
 
         public static final String CONTENT_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_AGENCY;

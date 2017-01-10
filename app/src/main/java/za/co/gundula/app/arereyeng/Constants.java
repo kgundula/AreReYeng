@@ -8,6 +8,7 @@ public class Constants {
 
 
     public static final String agency_key = "agency";
+    public static final String agency_already_saved = "agency_already_saved";
 
     // API AUTHORIZATION TOKEN
 

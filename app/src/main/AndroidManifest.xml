@@ -35,6 +35,50 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
 
+        <activity
+            android:name=".ui.BusFareActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="za.co.gundula.app.arereyeng.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.JourneyPlannerActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="za.co.gundula.app.arereyeng.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.AReYengMapActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="za.co.gundula.app.arereyeng.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.BusTimetableActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="za.co.gundula.app.arereyeng.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.AReYengCardsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="za.co.gundula.app.arereyeng.ui.MainActivity" />
+        </activity>
 
         <provider
             android:authorities="@string/content_authority"
@@ -65,12 +109,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
-        <activity android:name=".ui.BusFareActivity" />
-        <activity android:name=".ui.JourneyPlannerActivity" />
-        <activity android:name=".ui.AReYengMapActivity" />
-        <activity android:name=".ui.BusTimetableActivity" />
-        <activity android:name=".ui.AReYengCardsActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

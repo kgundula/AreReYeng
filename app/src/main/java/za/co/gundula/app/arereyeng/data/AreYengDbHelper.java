@@ -23,8 +23,8 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
 
-        final String SQL_CREATE_FARES_TABLE = "CREATE TABLE " + AreYengContract.FaresEntry.TABLE_NAME + " (" +
-                AreYengContract.FaresEntry._ID + " INTEGER PRIMARY KEY," +
+        final String SQL_CREATE_FARES_TABLE = "CREATE TABLE " + AreYengContract.FaresEntry.TABLE_NAME + "(" +
+                AreYengContract.FaresEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 AreYengContract.FaresEntry.COLUMN_FARE_PRODUCT + " TEXT UNIQUE NOT NULL, " +
                 AreYengContract.FaresEntry.COLUMN_DESCRIPTION + " TEXT NOT NULL, " +
                 AreYengContract.FaresEntry.COLUMN_COST + " REAL NOT NULL, " +
@@ -32,12 +32,12 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
                 " );";
 
 
-        final String SQL_CREATE_AGENCY_TABLE = "CREATE TABLE " + AreYengContract.AgencyEntry.TABLE_NAME + " (" +
-                AreYengContract.AgencyEntry._ID + " INTEGER PRIMARY KEY," +
+        final String SQL_CREATE_AGENCY_TABLE = "CREATE TABLE " + AreYengContract.AgencyEntry.TABLE_NAME + "(" +
+                AreYengContract.AgencyEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 AreYengContract.AgencyEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
                 AreYengContract.AgencyEntry.COLUMN_HREF + " TEXT NOT NULL, " +
                 AreYengContract.AgencyEntry.COLUMN_NAME + " TEXT NOT NULL, " +
-                AreYengContract.AgencyEntry.COLUMN_CULTURE + " TEXT NOT NULL " +
+                AreYengContract.AgencyEntry.COLUMN_CULTURE + " TEXT NOT NULL, " +
                 " UNIQUE ( " + AreYengContract.AgencyEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" +
                 " );";
 

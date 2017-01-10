@@ -22,7 +22,6 @@ public class AreYengContentProvider extends ContentProvider {
 
     static final int FARES = 100;
     static final int FARES_ID = 101;
-
     static final int AGENCY = 200;
     static final int AGENCY_ID = 201;
 
