@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -101,8 +102,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             getAgency();
         } else {
             getSupportLoaderManager().initLoader(AGENCY_LOADER, null, this);
-            //agency_key =
         }
+
+        getBuses();
     }
 
     public void getAgency() {
@@ -117,6 +119,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     String json_response = response.body().string();
                     // The API returns an array instead of a json object hence we make an agenct array
                     agency = new Gson().fromJson(json_response, Agency[].class);
+                    Log.i("Ygritte", json_response);
                     //agency_intent = agency[0];
                     ContentValues agencyValues = new ContentValues();
                     agencyValues.put(AreYengContract.AgencyEntry.COLUMN_ID, agency[0].getId());
@@ -146,6 +149,34 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
+    }
+
+    public void getBuses() {
+
+        Call<ResponseBody> call = whereIsMyTransportApiClient.getAllBusStops();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    //
+                    // [{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]}]
+                    String json_response = response.body().string();
+                    // The API returns an array instead of a json object hence we make an agenct array
+                    //agency = new Gson().fromJson(json_response, Agency[].class);
+                    Log.i("Ygritte", json_response);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
     public void updateUserDetails() {
@@ -230,7 +261,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             intent.putExtra(agency_key, agency_intent);
             startActivity(intent);
         } else if (id == R.id.nav_cards) {
-            Intent intent = new Intent(MainActivity.this, AReYengMapActivity.class);
+            Intent intent = new Intent(MainActivity.this, AReYengCardsActivity.class);
             intent.putExtra(agency_key, agency_intent);
             startActivity(intent);
         }

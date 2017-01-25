@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -76,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null) {
-                        Log.i("Ygritte", "User UID : " + user.getUid());
+                        //Log.i("Ygritte", "User UID : " + user.getUid());
                     } else {
                         SharedPreferences.Editor spe = sp.edit();
                         spe.putString(Constants.key_encoded_email, "");

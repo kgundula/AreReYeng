@@ -5,8 +5,7 @@
     android:id="@+id/activity_bus_fare"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fitsSystemWindows="false"
     tools:context="za.co.gundula.app.arereyeng.ui.BusFareActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -32,7 +31,7 @@
         android:id="@+id/bus_fare_main_content"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView

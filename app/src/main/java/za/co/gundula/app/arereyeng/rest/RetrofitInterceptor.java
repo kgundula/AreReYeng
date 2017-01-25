@@ -1,5 +1,7 @@
 package za.co.gundula.app.arereyeng.rest;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -26,6 +28,8 @@ public class RetrofitInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+
+        Log.i("Ygritte", "Authorization" + bearer + " " + token);
         // Authorization: Bearer eyJ0eXAiOiJ32aQiLCJhbGciOiJSUzI1NiIsIfg1iCI6ImEzck1VZ01Gd8d0UGNsTGE2eUYz...
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("Accept", "application/json");

@@ -5,8 +5,7 @@
     android:id="@+id/activity_are_yeng_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:fitsSystemWindows="false"
     tools:context="za.co.gundula.app.arereyeng.ui.AReYengMapActivity">
 
     <android.support.design.widget.AppBarLayout

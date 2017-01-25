@@ -17,6 +17,9 @@ public class AreYengContract {
     public static final String PATH_FARES = "fares";
     public static final String PATH_JOURNEY = "journey";
     public static final String PATH_AGENCY = "agency";
+    public static final String PATH_BUS_STOP = "bus_stops";
+    public static final String PATH_FARE_PRODUCT = "fare_product";
+    public static final String PATH_GEOMETRY = "geometry";
 
 
     public static final class FaresEntry implements BaseColumns {
@@ -65,6 +68,86 @@ public class AreYengContract {
         }
 
     }
+
+    public static final class BusStopEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_BUS_STOP).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BUS_STOP;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BUS_STOP;
+
+        // Table name
+        public static final String TABLE_NAME = "bus_stops";
+
+        public static final String COLUMN_ID = "id";
+        public static final String COLUMN_HREF = "href";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_CODE = "code";
+        public static final String COLUMN_GEOMETRY_TYPE = "geometry_type";
+        public static final String COLUMN_GEOMETRY_LATITUDE = "geometry_latitude";
+        public static final String COLUMN_GEOMETRY_LONGITUDE = "geometry_longitude";
+        public static final String COLUMN_MODES = "modes";
+
+        public static Uri buildBusStopUri(long _id) {
+            return ContentUris.withAppendedId(CONTENT_URI, _id);
+        }
+
+    }
+
+    public static final class GeometryEntry implements BaseColumns {
+
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_GEOMETRY).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GEOMETRY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_GEOMETRY;
+
+
+        // Table name
+        public static final String TABLE_NAME = "geometry";
+
+
+        public static final String COLUMN_ID = "id";
+
+
+    }
+
+    public static final class FareProductEntry implements BaseColumns {
+
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FARE_PRODUCT).build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FARE_PRODUCT;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FARE_PRODUCT;
+
+
+        // Table name
+        public static final String TABLE_NAME = "fare_product";
+
+
+        public static final String COLUMN_ID = "id";
+        public static final String COLUMN_HREF = "href";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_AGENCY_ID = "agency_id";
+        public static final String COLUMN_IS_DEFAULT = "isDefault";
+
+        public static Uri buildFareProductUri(long _id) {
+            return ContentUris.withAppendedId(CONTENT_URI, _id);
+        }
+
+
+    }
+
+
 
 
 }
