@@ -3,7 +3,6 @@ package za.co.gundula.app.arereyeng.rest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -24,7 +23,6 @@ public class WhereIsMyTransportApiClient {
     public static Retrofit getClient(final Context context) {
         if (retrofit == null) {
 
-            Log.i("Ygritte", BASE_URL);
             SharedPreferences mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
             String token = mSharedPref.getString(Constants.access_token, "");

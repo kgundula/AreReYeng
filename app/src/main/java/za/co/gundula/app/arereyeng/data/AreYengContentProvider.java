@@ -24,6 +24,8 @@ public class AreYengContentProvider extends ContentProvider {
     static final int FARES_ID = 101;
     static final int AGENCY = 200;
     static final int AGENCY_ID = 201;
+    static final int BUS_STOP = 300;
+    static final int BUS_STOP_ID = 301;
 
 
     static UriMatcher buildUriMatcher() {
@@ -41,6 +43,8 @@ public class AreYengContentProvider extends ContentProvider {
         matcher.addURI(authority, AreYengContract.PATH_FARES + "/*", FARES_ID);
         matcher.addURI(authority, AreYengContract.PATH_AGENCY, AGENCY);
         matcher.addURI(authority, AreYengContract.PATH_AGENCY + "/*", AGENCY_ID);
+        matcher.addURI(authority, AreYengContract.PATH_BUS_STOP, BUS_STOP);
+        matcher.addURI(authority, AreYengContract.PATH_BUS_STOP + "/*", BUS_STOP_ID);
         return matcher;
     }
 
@@ -81,6 +85,18 @@ public class AreYengContentProvider extends ContentProvider {
                 );
                 break;
             }
+            case BUS_STOP: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        AreYengContract.BusStopEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -102,6 +118,10 @@ public class AreYengContentProvider extends ContentProvider {
                 return AreYengContract.AgencyEntry.CONTENT_ITEM_TYPE;
             case AGENCY:
                 return AreYengContract.AgencyEntry.CONTENT_TYPE;
+            case BUS_STOP_ID:
+                return AreYengContract.BusStopEntry.CONTENT_ITEM_TYPE;
+            case BUS_STOP:
+                return AreYengContract.BusStopEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -132,6 +152,14 @@ public class AreYengContentProvider extends ContentProvider {
                     throw new SQLException("Failed to insert new row into :" + uri);
                 break;
             }
+            case BUS_STOP: {
+                long _id = db.insert(AreYengContract.BusStopEntry.TABLE_NAME, null, values);
+                if (_id > 0)
+                    aReYengUri = AreYengContract.BusStopEntry.buildBusStopUri(_id);
+                else
+                    throw new SQLException("Failed to insert new row into :" + uri);
+                break;
+            }
 
             default:
                 throw new UnsupportedOperationException("Unknown Uri" + uri);
@@ -153,6 +181,9 @@ public class AreYengContentProvider extends ContentProvider {
                 break;
             case FARES:
                 deleted = db.delete(AreYengContract.FaresEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case BUS_STOP:
+                deleted = db.delete(AreYengContract.BusStopEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown Uri:" + uri);
@@ -180,6 +211,10 @@ public class AreYengContentProvider extends ContentProvider {
                 updated = db.update(AreYengContract.FaresEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
+            case BUS_STOP: {
+                updated = db.update(AreYengContract.BusStopEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -189,4 +224,31 @@ public class AreYengContentProvider extends ContentProvider {
         }
         return updated;
     }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = aUriMatcher.match(uri);
+        switch (match) {
+            case BUS_STOP:
+                db.beginTransaction();
+                int returnCount = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(AreYengContract.BusStopEntry.TABLE_NAME, null, value);
+                        if (_id != -1) {
+                            returnCount++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            default:
+                return super.bulkInsert(uri, values);
+        }
+    }
+
 }

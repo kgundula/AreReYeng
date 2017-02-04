@@ -31,6 +31,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Vector;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
@@ -159,11 +164,64 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     //
-                    // [{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]}]
                     String json_response = response.body().string();
                     // The API returns an array instead of a json object hence we make an agenct array
                     //agency = new Gson().fromJson(json_response, Agency[].class);
-                    Log.i("Ygritte", json_response);
+                    //Log.i("Ygritte", json_response);
+
+                    JSONArray bus_stops = new JSONArray(json_response);
+                    Vector<ContentValues> cVVector = new Vector<ContentValues>(bus_stops.length());
+
+                    for (int i = 0; i < bus_stops.length(); i++) {
+                        JSONObject bus_stop = bus_stops.getJSONObject(i);
+                        /*
+                        * {"id":"FGHU1tF_40S5ZOAYimd7zQ",
+                        * "href":"https://platform.whereismytransport.com/api/stops/FGHU1tF_40S5ZOAYimd7zQ",
+                        * "agency":{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]},
+                        * "name":"Annie Botha",
+                        * "code":"Annie Botha",
+                        * "geometry":{"type":"Point","coordinates":[28.204797,-25.732453]},
+                        * "modes":["Bus"],
+                        * "alerts":[]}
+                        *
+                        *
+                        *
+                        *  public static final String COLUMN_ID = "id";
+                        *  public static final String COLUMN_HREF = "href";
+                        *  public static final String COLUMN_NAME = "name";
+                        *  public static final String COLUMN_CODE = "code";
+                        *  public static final String COLUMN_GEOMETRY_TYPE = "geometry_type";
+                        *  public static final String COLUMN_GEOMETRY_LATITUDE = "geometry_latitude";
+                        *  public static final String COLUMN_GEOMETRY_LONGITUDE = "geometry_longitude";
+                        *  public static final String COLUMN_MODES = "modes";
+                        *
+                        *
+                        * */
+
+                        ContentValues busStopValues = new ContentValues();
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_ID, bus_stop.getString("id"));
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_HREF, bus_stop.getString("href"));
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_NAME, bus_stop.getString("name"));
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_CODE, bus_stop.getString("code"));
+                        JSONObject geometry = bus_stop.getJSONObject("geometry");
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_GEOMETRY_TYPE, geometry.getString("type"));
+                        JSONArray coordinates = geometry.getJSONArray("coordinates");
+                        JSONArray bus_modes = bus_stop.getJSONArray("modes");
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LONGITUDE, String.valueOf(coordinates.get(0)));
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LATITUDE, String.valueOf(coordinates.get(1)));
+                        busStopValues.put(AreYengContract.BusStopEntry.COLUMN_MODES, String.valueOf(bus_modes.get(0)));
+
+                        cVVector.add(busStopValues);
+
+                    }
+
+                    //int inserted = 0;
+                    // add to database
+                    if (cVVector.size() > 0) {
+                        ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                        cVVector.toArray(cvArray);
+                        getContentResolver().bulkInsert(AreYengContract.BusStopEntry.CONTENT_URI, cvArray);
+                    }
 
 
                 } catch (Exception e) {

@@ -41,15 +41,46 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
                 " UNIQUE ( " + AreYengContract.AgencyEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" +
                 " );";
 
+        final String SQL_CREATE_FARE_PRODUCT_TABLE = "CREATE TABLE " + AreYengContract.FareProductEntry.TABLE_NAME + "(" +
+                AreYengContract.FareProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                AreYengContract.FareProductEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
+                AreYengContract.FareProductEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                AreYengContract.FareProductEntry.COLUMN_AGENCY_ID + " TEXT NOT NULL, " +
+                AreYengContract.FareProductEntry.COLUMN_HREF + " TEXT NOT NULL, " +
+                AreYengContract.FareProductEntry.COLUMN_IS_DEFAULT + " BOOLEAN NOT NULL, " +
+                " UNIQUE ( " + AreYengContract.FareProductEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" + " );";
+
+
+        final String SQL_CREATE_BUS_STOP_TABLE = "CREATE TABLE " + AreYengContract.BusStopEntry.TABLE_NAME + "(" +
+                AreYengContract.BusStopEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                AreYengContract.BusStopEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_CODE + " TEXT NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LATITUDE + " TEXT NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LONGITUDE + " TEXT NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_GEOMETRY_TYPE + " TEXT NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_HREF + " TEXT NOT NULL, " +
+                AreYengContract.BusStopEntry.COLUMN_MODES + " BOOLEAN NOT NULL, " +
+                " UNIQUE ( " + AreYengContract.BusStopEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" + " );";
+
+
+        final String SQL_GEOMETRY_TABLE = "CREATE TABLE " + AreYengContract.GeometryEntry.TABLE_NAME + "(" +
+                AreYengContract.GeometryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                AreYengContract.GeometryEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
+                " );";
 
         db.execSQL(SQL_CREATE_FARES_TABLE);
         db.execSQL(SQL_CREATE_AGENCY_TABLE);
+        db.execSQL(SQL_CREATE_FARE_PRODUCT_TABLE);
+        db.execSQL(SQL_CREATE_BUS_STOP_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.FaresEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.AgencyEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.BusStopEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.FareProductEntry.TABLE_NAME);
         onCreate(db);
     }
 }

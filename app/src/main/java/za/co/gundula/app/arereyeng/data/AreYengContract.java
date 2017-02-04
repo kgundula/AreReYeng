@@ -21,7 +21,6 @@ public class AreYengContract {
     public static final String PATH_FARE_PRODUCT = "fare_product";
     public static final String PATH_GEOMETRY = "geometry";
 
-
     public static final class FaresEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -111,8 +110,6 @@ public class AreYengContract {
 
         // Table name
         public static final String TABLE_NAME = "geometry";
-
-
         public static final String COLUMN_ID = "id";
 
 
@@ -128,7 +125,6 @@ public class AreYengContract {
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FARE_PRODUCT;
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FARE_PRODUCT;
-
 
         // Table name
         public static final String TABLE_NAME = "fare_product";
