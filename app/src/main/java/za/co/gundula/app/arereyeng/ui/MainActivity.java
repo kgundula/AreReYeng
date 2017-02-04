@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -163,40 +164,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
-                    //
+
                     String json_response = response.body().string();
-                    // The API returns an array instead of a json object hence we make an agenct array
-                    //agency = new Gson().fromJson(json_response, Agency[].class);
-                    //Log.i("Ygritte", json_response);
+                    /*
+                    * The API returns an array instead of a json object hence we make an agenct array
+                    * agency = new Gson().fromJson(json_response, Agency[].class);
+                    */
 
                     JSONArray bus_stops = new JSONArray(json_response);
                     Vector<ContentValues> cVVector = new Vector<ContentValues>(bus_stops.length());
 
                     for (int i = 0; i < bus_stops.length(); i++) {
                         JSONObject bus_stop = bus_stops.getJSONObject(i);
-                        /*
-                        * {"id":"FGHU1tF_40S5ZOAYimd7zQ",
-                        * "href":"https://platform.whereismytransport.com/api/stops/FGHU1tF_40S5ZOAYimd7zQ",
-                        * "agency":{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]},
-                        * "name":"Annie Botha",
-                        * "code":"Annie Botha",
-                        * "geometry":{"type":"Point","coordinates":[28.204797,-25.732453]},
-                        * "modes":["Bus"],
-                        * "alerts":[]}
-                        *
-                        *
-                        *
-                        *  public static final String COLUMN_ID = "id";
-                        *  public static final String COLUMN_HREF = "href";
-                        *  public static final String COLUMN_NAME = "name";
-                        *  public static final String COLUMN_CODE = "code";
-                        *  public static final String COLUMN_GEOMETRY_TYPE = "geometry_type";
-                        *  public static final String COLUMN_GEOMETRY_LATITUDE = "geometry_latitude";
-                        *  public static final String COLUMN_GEOMETRY_LONGITUDE = "geometry_longitude";
-                        *  public static final String COLUMN_MODES = "modes";
-                        *
-                        *
-                        * */
 
                         ContentValues busStopValues = new ContentValues();
                         busStopValues.put(AreYengContract.BusStopEntry.COLUMN_ID, bus_stop.getString("id"));
@@ -214,8 +193,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         cVVector.add(busStopValues);
 
                     }
-
-                    //int inserted = 0;
                     // add to database
                     if (cVVector.size() > 0) {
                         ContentValues[] cvArray = new ContentValues[cVVector.size()];
@@ -232,7 +209,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                Log.i("Ygritte", t.getMessage());
             }
         });
     }
@@ -377,7 +354,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data != null && data.moveToFirst()) {
-            //Log.i("Ygritte", DatabaseUtils.dumpCursorToString(data));
+            Log.i("Ygritte", DatabaseUtils.dumpCursorToString(data));
             agency_intent = new Agency(data.getString(COL_ID), data.getString(COL_NAME), data.getString(COL_CULTURE), data.getString(COL_HREF));
         }
     }
