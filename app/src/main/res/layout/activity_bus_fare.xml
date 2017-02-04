@@ -41,7 +41,7 @@
 
         <MultiAutoCompleteTextView
             android:id="@+id/from_bus_station"
-            android:text="@string/from_station"
+            android:hint="@string/from_station"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/edit_text_padding"
@@ -50,7 +50,7 @@
 
         <MultiAutoCompleteTextView
             android:id="@+id/to_bus_station"
-            android:text="@string/to_station"
+            android:hint="@string/to_station"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/edit_text_padding"

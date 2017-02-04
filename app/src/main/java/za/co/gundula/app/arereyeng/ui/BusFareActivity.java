@@ -1,6 +1,7 @@
 package za.co.gundula.app.arereyeng.ui;
 
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -8,6 +9,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,9 +56,7 @@ public class BusFareActivity extends AppCompatActivity implements LoaderManager.
         String[] BUS_STOP_PROJECTION = new String[]{
                 AreYengContract.BusStopEntry.COLUMN_ID,
                 AreYengContract.BusStopEntry.COLUMN_NAME,
-                AreYengContract.BusStopEntry.COLUMN_CODE,
                 AreYengContract.BusStopEntry.COLUMN_HREF,
-                AreYengContract.BusStopEntry.COLUMN_MODES,
                 AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LATITUDE,
                 AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LONGITUDE,
                 AreYengContract.BusStopEntry.COLUMN_GEOMETRY_TYPE,
@@ -75,7 +75,7 @@ public class BusFareActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-            //Log.i("Ygritte", DatabaseUtils.dumpCursorToString(data));
+            Log.i("Ygritte", DatabaseUtils.dumpCursorToString(data));
         }
     }
 

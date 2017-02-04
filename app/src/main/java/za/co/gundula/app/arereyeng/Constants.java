@@ -36,4 +36,6 @@ public class Constants {
     public static final String google_provider = "google";
     public static final String provider_display_name = "displayName";
 
+    public static final int REQUEST_LOCATION = 0;
+
 }

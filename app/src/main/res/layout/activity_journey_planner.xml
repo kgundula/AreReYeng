@@ -44,19 +44,8 @@
             android:layout_alignParentStart="true" />
 
         <MultiAutoCompleteTextView
-            android:layout_below="@+id/from_bus_station"
-            android:layout_alignParentStart="true"
-            android:id="@+id/to_bus_station"
-            android:text="@string/end"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/edit_text_padding"
-            android:paddingRight="@dimen/edit_text_padding"
-            android:paddingLeft="@dimen/edit_text_padding" />
-
-        <MultiAutoCompleteTextView
             android:id="@+id/from_bus_station"
-            android:text="@string/start"
+            android:hint="@string/start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/edit_text_padding"
@@ -64,6 +53,18 @@
             android:paddingLeft="@dimen/edit_text_padding"
             android:layout_below="@+id/info_text"
             android:layout_alignParentStart="true" />
+
+        <MultiAutoCompleteTextView
+            android:layout_below="@+id/from_bus_station"
+            android:layout_alignParentStart="true"
+            android:id="@+id/to_bus_station"
+            android:hint="@string/end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/edit_text_padding"
+            android:paddingRight="@dimen/edit_text_padding"
+            android:paddingLeft="@dimen/edit_text_padding" />
+
 
 
     </RelativeLayout>
