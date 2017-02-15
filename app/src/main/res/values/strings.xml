@@ -65,7 +65,6 @@
     <string name="google_error_auth_with_google">"Error authenticating with Google: "</string>
     <string name="google_error_network_error">"Network error: "</string>
 
-
     <!-- OAuth Format -->
     <string name="oauth2_format">oauth2:%s</string>
 
@@ -84,4 +83,13 @@
     <string name="api_key">AIzaSyDIk349-wifa2LKl7iiLzmOBgAXoVVQDhQ</string>
     <string name="end">End</string>
     <string name="start">Start</string>
+
+    <!-- No Internet -->
+    <string name="no_internet">No Internet Connection. Make sure Wi-Fi or cellular data is turned on, then try again.</string>
+    <string name="retry_internet">Retry</string>
+    <string name="favourites">Below is the stops you recently searched for.</string>
+    <string name="time">Time</string>
+    <string name="cost">Cost</string>
+    <string name="stations">Stations</string>
+    <string name="detail_journey">Detail Journey</string>
 </resources>

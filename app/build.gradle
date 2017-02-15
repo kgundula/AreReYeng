@@ -45,24 +45,30 @@ dependencies {
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:palette-v7:${supportLibVersion}"
+
     //HTTP Libs
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
     //Image Loading
+
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
     //Play Services and Firebase
     compile "com.google.android.gms:play-services-auth:${playServicesLibVersion}"
+    compile "com.google.android.gms:play-services-maps:${playServicesLibVersion}"
+
     compile "com.google.firebase:firebase-core:${firebaseLibVersion}"
     compile "com.google.firebase:firebase-auth:${firebaseLibVersion}"
     compile "com.google.firebase:firebase-crash:${firebaseLibVersion}"
     compile "com.google.firebase:firebase-database:${firebaseLibVersion}"
+
     //Data Binding
     compile 'com.jakewharton:butterknife:8.2.1'
     apt "com.jakewharton:butterknife-compiler:8.2.1"
 
     testCompile 'junit:junit:4.12'
-    compile 'com.google.android.gms:play-services-maps:10.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

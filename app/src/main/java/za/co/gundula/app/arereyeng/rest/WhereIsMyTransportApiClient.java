@@ -8,7 +8,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import za.co.gundula.app.arereyeng.BuildConfig;
-import za.co.gundula.app.arereyeng.Constants;
+import za.co.gundula.app.arereyeng.utils.Constants;
 
 /**
  * Created by kgundula on 2016/11/04.

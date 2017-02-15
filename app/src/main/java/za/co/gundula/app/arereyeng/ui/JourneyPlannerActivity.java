@@ -9,6 +9,8 @@ import butterknife.ButterKnife;
 import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.model.Agency;
 
+import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
+
 public class JourneyPlannerActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -25,7 +27,7 @@ public class JourneyPlannerActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            agency = bundle.getParcelable("agency_key");
+            agency = bundle.getParcelable(agency_key);
         }
 
         toolbar.setTitle(getResources().getString(R.string.plan_your_journey));

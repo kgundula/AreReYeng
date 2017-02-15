@@ -1,4 +1,4 @@
-package za.co.gundula.app.arereyeng;
+package za.co.gundula.app.arereyeng.utils;
 
 /**
  * Created by kgundula on 2016/11/04.

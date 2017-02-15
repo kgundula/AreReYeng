@@ -20,7 +20,7 @@ import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import za.co.gundula.app.arereyeng.Constants;
+import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.R;
 
 /**

@@ -23,10 +23,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import za.co.gundula.app.arereyeng.Constants;
+import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.data.AreYengContract;
 import za.co.gundula.app.arereyeng.model.Agency;
+
+import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
 
 public class AReYengMapActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>, OnMapReadyCallback {
 
@@ -47,7 +49,7 @@ public class AReYengMapActivity extends AppCompatActivity implements LoaderManag
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            agency = bundle.getParcelable("agency_key");
+            agency = bundle.getParcelable(agency_key);
         }
 
 

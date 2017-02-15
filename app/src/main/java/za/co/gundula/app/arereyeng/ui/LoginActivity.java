@@ -34,7 +34,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import za.co.gundula.app.arereyeng.Constants;
+import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.R;
 
 /**

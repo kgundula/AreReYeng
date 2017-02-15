@@ -9,6 +9,8 @@ import butterknife.ButterKnife;
 import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.model.Agency;
 
+import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
+
 public class AReYengCardsActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
@@ -24,7 +26,7 @@ public class AReYengCardsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            agency = bundle.getParcelable("agency_key");
+            agency = bundle.getParcelable(agency_key);
         }
 
         toolbar.setTitle(getResources().getString(R.string.areyeng_cards));

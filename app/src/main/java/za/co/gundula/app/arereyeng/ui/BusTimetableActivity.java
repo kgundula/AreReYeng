@@ -15,6 +15,8 @@ import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.data.AreYengContract;
 import za.co.gundula.app.arereyeng.model.Agency;
 
+import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
+
 public class BusTimetableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.toolbar)
@@ -33,7 +35,7 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            agency = bundle.getParcelable("agency_key");
+            agency = bundle.getParcelable(agency_key);
         }
 
 

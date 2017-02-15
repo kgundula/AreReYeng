@@ -17,7 +17,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import za.co.gundula.app.arereyeng.BuildConfig;
-import za.co.gundula.app.arereyeng.Constants;
+import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.model.ApiToken;
 
 /**
