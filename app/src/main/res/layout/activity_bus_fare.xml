@@ -38,88 +38,105 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/info_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <AutoCompleteTextView
-            android:id="@+id/from_bus_station"
-            android:hint="@string/from_station"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/edit_text_padding"
-            android:paddingRight="@dimen/edit_text_padding"
-            android:paddingLeft="@dimen/edit_text_padding" />
-
-        <AutoCompleteTextView
-            android:id="@+id/to_bus_station"
-            android:hint="@string/to_station"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/edit_text_padding"
-            android:paddingRight="@dimen/edit_text_padding"
-            android:paddingLeft="@dimen/edit_text_padding" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_margin="@dimen/margin_normal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+            <AutoCompleteTextView
+                android:id="@+id/from_bus_station"
+                android:hint="@string/from_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/edit_text_padding"
+                android:paddingRight="@dimen/edit_text_padding"
+                android:paddingLeft="@dimen/edit_text_padding" />
+
+            <AutoCompleteTextView
+                android:id="@+id/to_bus_station"
+                android:hint="@string/to_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/edit_text_padding"
+                android:paddingRight="@dimen/edit_text_padding"
+                android:paddingLeft="@dimen/edit_text_padding" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/edit_text_padding">
+                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/journey_detail"
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleLarge"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    android:text="@string/detail_journey"
-                    android:paddingTop="@dimen/edit_text_padding"
-                    android:paddingBottom="@dimen/edit_text_padding" />
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
 
-                <TextView
-                    android:id="@+id/journey_time_heading"
+                <LinearLayout
+                    android:id="@+id/linear_detail"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/time" />
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    android:padding="@dimen/edit_text_padding">
 
-                <TextView
-                    android:id="@+id/journey_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/journey_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                        android:text="@string/detail_journey"
+                        android:paddingTop="@dimen/edit_text_padding"
+                        android:paddingBottom="@dimen/edit_text_padding" />
+
+                    <TextView
+                        android:id="@+id/journey_time_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time" />
+
+                    <TextView
+                        android:id="@+id/journey_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
 
-                <TextView
-                    android:id="@+id/cost_heading"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/cost" />
+                    <TextView
+                        android:id="@+id/cost_heading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cost" />
 
-                <TextView
-                    android:id="@+id/cost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/journey_cost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
-                <TextView
-                    android:id="@+id/stations"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    android:text="@string/stations"
-                    android:paddingTop="@dimen/edit_text_padding"
-                    android:paddingBottom="@dimen/edit_text_padding" />
+                    <TextView
+                        android:id="@+id/stations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                        android:text="@string/stations"
+                        android:paddingTop="@dimen/edit_text_padding"
+                        android:paddingBottom="@dimen/edit_text_padding" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/station_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
 
             </LinearLayout>
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

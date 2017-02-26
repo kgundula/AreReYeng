@@ -87,9 +87,31 @@
     <!-- No Internet -->
     <string name="no_internet">No Internet Connection. Make sure Wi-Fi or cellular data is turned on, then try again.</string>
     <string name="retry_internet">Retry</string>
+
+    <!-- Errors -->
+    <string name="server_error">Server Error</string>
+    <string name="json_error">Json Parsing Error</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="server_down_error">Server Down Error</string>
+    <string name="no_network_error">No Network</string>
+
+
+    <string name="search_for">Enter any two stops and get a breakdown of distance and cost to travel between them.</string>
     <string name="favourites">Below is the stops you recently searched for.</string>
+    <string name="select_stop">Select a stop </string>
     <string name="time">Time</string>
     <string name="cost">Cost</string>
     <string name="stations">Stations</string>
     <string name="detail_journey">Detail Journey</string>
+    <string name="previous_calculations">No previous fare calculated</string>
+    <string name="select_bus_stop">Select a bus stop to show the bus timetable</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <!-- Bus Stop Widget -->
+    <string name="title_widget_bus_stop">Are Yeng</string>
+    <string name="listview_widget">Widget listview</string>
+    <string name="empty_data">Data not available</string>
+
+
 </resources>

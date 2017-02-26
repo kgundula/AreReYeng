@@ -3,6 +3,7 @@ package za.co.gundula.app.arereyeng.rest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +18,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import za.co.gundula.app.arereyeng.BuildConfig;
-import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.model.ApiToken;
+import za.co.gundula.app.arereyeng.utils.Constants;
 
 /**
  * Created by kgundula on 2016/11/03.
@@ -82,6 +83,8 @@ public class WhereIsMyTransportTokenApiClient {
                     mSharedPrefEditor.putString(Constants.token_type, apiToken.getToken_type()).apply();
                     mSharedPrefEditor.putString(Constants.access_token, apiToken.getAccess_token()).apply();
                     mSharedPrefEditor.putString(Constants.expires_in, apiToken.getExpires_in()).apply();
+
+                    Log.i("Ygritte", "Token : " + apiToken.getAccess_token());
 
 
                 } catch (JSONException e) {

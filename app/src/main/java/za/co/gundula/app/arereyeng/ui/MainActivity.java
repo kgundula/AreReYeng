@@ -1,5 +1,7 @@
 package za.co.gundula.app.arereyeng.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +44,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.data.AreYengContract;
 import za.co.gundula.app.arereyeng.model.Agency;
@@ -50,6 +51,7 @@ import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.sync.AreYengSyncAdapter;
 import za.co.gundula.app.arereyeng.utils.CircleTransform;
+import za.co.gundula.app.arereyeng.utils.Constants;
 
 import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
 
@@ -64,6 +66,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+
+    @BindView(R.id.info_text)
+    TextView info_text;
 
     SharedPreferences mSharedPref;
     SharedPreferences.Editor mSharedPrefEditor;
@@ -91,6 +96,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar(toolbar);
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPrefEditor = mSharedPref.edit();
+
+        info_text.setText(R.string.favourites);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -120,11 +127,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     //
-                    // [{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https://platform.whereismytransport.com/api/agencies/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en","alerts":[]}]
                     String json_response = response.body().string();
                     // The API returns an array instead of a json object hence we make an agenct array
                     agency = new Gson().fromJson(json_response, Agency[].class);
-                    Log.i("Ygritte", json_response);
                     //agency_intent = agency[0];
                     ContentValues agencyValues = new ContentValues();
                     agencyValues.put(AreYengContract.AgencyEntry.COLUMN_ID, agency[0].getId());
@@ -165,6 +170,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 try {
 
                     String json_response = response.body().string();
+                    //Log.i("Ygritte", json_response);
                     /*
                     * The API returns an array instead of a json object hence we make an agenct array
                     * agency = new Gson().fromJson(json_response, Agency[].class);
@@ -190,6 +196,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         busStopValues.put(AreYengContract.BusStopEntry.COLUMN_MODES, String.valueOf(bus_modes.get(0)));
 
                         cVVector.add(busStopValues);
+                        Log.i("Ygritte", "Updating buses");
 
                     }
                     // add to database
@@ -197,6 +204,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         ContentValues[] cvArray = new ContentValues[cVVector.size()];
                         cVVector.toArray(cvArray);
                         getContentResolver().bulkInsert(AreYengContract.BusStopEntry.CONTENT_URI, cvArray);
+
+                        updateBusWidget();
                     }
 
 
@@ -208,7 +217,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("Ygritte", t.getMessage());
+                Log.i("Ygritte", "Error : " + t.getMessage());
             }
         });
     }
@@ -360,6 +369,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private void updateBusWidget() {
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context.getApplicationContext());
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(this, BusStopWidgetService.class));
+        if (ids.length > 0) {
+            Log.i("Ygritte", "Widget No : " + ids.length);
+            appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.bus_stop_widget_layout);
+        }
     }
 }
 
