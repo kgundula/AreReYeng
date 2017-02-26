@@ -29,9 +29,9 @@ public class BusStopWidget extends AppWidgetProvider {
         if (INTENT_ACTION.equals(intent.getAction())) {
 
             Intent busTimetableIntent = new Intent(context, BusTimetableActivity.class);
-            busTimetableIntent.putExtra("stop_id", intent.getStringExtra(EXTRA_BUS_STOP_ID));
-            busTimetableIntent.putExtra("stop_name", intent.getStringExtra(EXTRA_BUS_STOP_NAME));
-            busTimetableIntent.putExtra("stop_code", intent.getStringExtra(EXTRA_BUS_STOP_CODE));
+            busTimetableIntent.putExtra(EXTRA_BUS_STOP_ID, intent.getStringExtra(EXTRA_BUS_STOP_ID));
+            busTimetableIntent.putExtra(EXTRA_BUS_STOP_NAME, intent.getStringExtra(EXTRA_BUS_STOP_NAME));
+            busTimetableIntent.putExtra(EXTRA_BUS_STOP_CODE, intent.getStringExtra(EXTRA_BUS_STOP_CODE));
             busTimetableIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(busTimetableIntent);
         }

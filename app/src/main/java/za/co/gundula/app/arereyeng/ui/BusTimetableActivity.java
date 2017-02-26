@@ -45,8 +45,6 @@ import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.utils.RecylerViewDividerItemDecoration;
 
-import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
-
 public class BusTimetableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.toolbar)
@@ -84,10 +82,20 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
         setContentView(R.layout.activity_bus_timetable);
         context = getApplicationContext();
         ButterKnife.bind(this);
+        whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            agency = bundle.getParcelable(agency_key);
+            //agency = bundle.getParcelable(agency_key);
+
+            String stop_id = bundle.getString(BusStopWidget.EXTRA_BUS_STOP_ID);
+            String stop_name = bundle.getString(BusStopWidget.EXTRA_BUS_STOP_NAME);
+
+            if (!"".equals(stop_id)) {
+                Log.i("Ygritte", "Stop ID :" + stop_id);
+                getBusTimeTable(stop_id, stop_name);
+            }
+
         }
 
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -104,8 +112,6 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
         getSupportLoaderManager().initLoader(BUS_STOP_LOADER, null, this);
 
         info_text.setText(R.string.select_bus_stop);
-
-        whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
 
         from_bus_station.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
