@@ -1,15 +1,27 @@
 package za.co.gundula.app.arereyeng.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 /**
  * Created by kgundula on 2017/01/07.
  */
 
 public class Geometry {
 
+    @SerializedName("type")
+    @Expose
     private String type;
-    private Integer[] coordinates;
+    @SerializedName("coordinates")
+    @Expose
+    private List<List<Double>> coordinates = null;
 
-    public Geometry(String type, Integer[] coordinates) {
+    public Geometry() {
+    }
+
+    public Geometry(String type, List<List<Double>> coordinates) {
         this.type = type;
         this.coordinates = coordinates;
     }
@@ -22,11 +34,12 @@ public class Geometry {
         this.type = type;
     }
 
-    public Integer[] getCoordinates() {
+    public List<List<Double>> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(Integer[] coordinates) {
+    public void setCoordinates(List<List<Double>> coordinates) {
         this.coordinates = coordinates;
     }
+
 }

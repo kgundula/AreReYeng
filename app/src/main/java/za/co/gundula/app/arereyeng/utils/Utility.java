@@ -27,8 +27,7 @@ public class Utility {
     }
 
 
-    public static String getISOCurrentDateTime(final Calendar calendar) {
-        Date date = calendar.getTime();
+    public static String getISOCurrentDateTime(final Date date) {
         String formatted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH)
                 .format(date);
         return formatted.substring(0, 16) + "Z";

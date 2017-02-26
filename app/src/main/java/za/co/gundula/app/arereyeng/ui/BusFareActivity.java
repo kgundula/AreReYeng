@@ -26,6 +26,8 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,11 +40,15 @@ import za.co.gundula.app.arereyeng.R;
 import za.co.gundula.app.arereyeng.data.AreYengContract;
 import za.co.gundula.app.arereyeng.model.Agency;
 import za.co.gundula.app.arereyeng.model.FareProduct;
+import za.co.gundula.app.arereyeng.model.Geometry;
+import za.co.gundula.app.arereyeng.model.Journey;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.utils.Constants;
+import za.co.gundula.app.arereyeng.utils.Utility;
 
 import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
+import static za.co.gundula.app.arereyeng.utils.Constants.fare_product_already_saved;
 
 public class BusFareActivity extends AppCompatActivity {
 
@@ -85,6 +91,7 @@ public class BusFareActivity extends AppCompatActivity {
     WhereIsMyTransportApiClientInterface whereIsMyTransportApiClient;
     Context context;
 
+
     String[] BUS_STOP_PROJECTION = new String[]{
             AreYengContract.BusStopEntry.COLUMN_ID,
             AreYengContract.BusStopEntry.COLUMN_NAME,
@@ -97,8 +104,12 @@ public class BusFareActivity extends AppCompatActivity {
     SharedPreferences mSharedPref;
     SharedPreferences.Editor mSharedPrefEditor;
 
-    boolean is_are_product_already_saved = false;
+    HashMap<String, String> stopLatitudeMap = new HashMap<>();
+    HashMap<String, String> stopLongitudeMap = new HashMap<>();
 
+
+    boolean is_are_product_already_saved = false;
+    String agency_id = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +118,8 @@ public class BusFareActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         context = getApplicationContext();
+        whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
+
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPrefEditor = mSharedPref.edit();
 
@@ -117,7 +130,6 @@ public class BusFareActivity extends AppCompatActivity {
 
         info_text.setText(R.string.search_for);
 
-        whereIsMyTransportApiClient = WhereIsMyTransportApiClient.getClient(context).create(WhereIsMyTransportApiClientInterface.class);
 
         toolbar.setTitle(getResources().getString(R.string.fare_calculator));
         setSupportActionBar(toolbar);
@@ -125,21 +137,17 @@ public class BusFareActivity extends AppCompatActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        is_are_product_already_saved = mSharedPref.getBoolean(Constants.fare_product_already_saved, false);
-
-        if (!is_are_product_already_saved) {
-
-        }
-        if (agency != null) {
-            getFareProducts();
+        is_are_product_already_saved = mSharedPref.getBoolean(fare_product_already_saved, false);
+        agency_id = mSharedPref.getString(Constants.agency_id, "");
+        if (!"".equals(agency_id)) {
+            getFareProducts(agency_id);
         }
 
     }
 
-    public void getFareProducts() {
+    public void getFareProducts(String agency_id) {
 
-        Log.i("Ygritte", agency.getId());
-        Call<ResponseBody> call = whereIsMyTransportApiClient.getFareProducts(agency.getId());
+        Call<ResponseBody> call = whereIsMyTransportApiClient.getFareProducts(agency_id);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -154,8 +162,6 @@ public class BusFareActivity extends AppCompatActivity {
 
                         FareProduct fareProduct = new Gson().fromJson(fare_products.getString(0), FareProduct.class);
 
-                        Log.i("Ygritte", "Fare Name : " + fareProduct.getName());
-
                         ContentValues fareProductValues = new ContentValues();
                         fareProductValues.put(AreYengContract.FareProductEntry.COLUMN_ID, fareProduct.getId());
                         fareProductValues.put(AreYengContract.FareProductEntry.COLUMN_NAME, fareProduct.getName());
@@ -166,7 +172,7 @@ public class BusFareActivity extends AppCompatActivity {
                         try {
                             getContentResolver().insert(AreYengContract.FareProductEntry.CONTENT_URI, fareProductValues);
                             getContentResolver().notifyChange(AreYengContract.FareProductEntry.CONTENT_URI, null);
-                            mSharedPrefEditor.putBoolean(Constants.fare_product_already_saved, true).apply();
+                            mSharedPrefEditor.putBoolean(fare_product_already_saved, true).apply();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -197,8 +203,12 @@ public class BusFareActivity extends AppCompatActivity {
 
             do {
                 String station_name = bus_stops.getString(1);
+                String station_latitude = bus_stops.getString(3);
+                String station_longitude = bus_stops.getString(4);
                 bus_station_from.add(station_name);
                 bus_station_to.add(station_name);
+                stopLatitudeMap.put(station_name, station_latitude);
+                stopLongitudeMap.put(station_name, station_longitude);
 
             } while (bus_stops.moveToNext());
 
@@ -244,12 +254,88 @@ public class BusFareActivity extends AppCompatActivity {
     }
 
     public void searchBusFare() {
-        if (!"".equals(from_busstation) && !"".equals(to_busstation)) {
-            Log.i("Ygritte", " From - " + from_busstation + "  : To -" + to_busstation);
-            //getFareProducts();
 
-        } else {
-            Log.i("Ygritte", "Both are required");
+        if (!"".equals(from_busstation) && !"".equals(to_busstation)) {
+            Cursor cursor = getFareProduct();
+            if (cursor != null && cursor.moveToFirst()) {
+
+                Log.i("Ygritte", "Fare ID " + cursor.getString(0));
+
+                double from_lat = Double.valueOf(stopLatitudeMap.get(from_busstation));
+                double from_longi = Double.valueOf(stopLongitudeMap.get(from_busstation));
+
+                double to_lat = Double.valueOf(stopLatitudeMap.get(to_busstation));
+                double to_longi = Double.valueOf(stopLongitudeMap.get(to_busstation));
+
+                List<Double> fromCoordinates = new ArrayList<>();
+                fromCoordinates.add(from_longi);
+                fromCoordinates.add(from_lat);
+
+                List<Double> toCoordinates = new ArrayList<>();
+                toCoordinates.add(to_longi);
+                toCoordinates.add(to_lat);
+
+                List<List<Double>> coordinates = new ArrayList<>();
+                coordinates.add(fromCoordinates);
+                coordinates.add(toCoordinates);
+
+                Geometry geometry = new Geometry("MultiPoint", coordinates);
+
+                Date now = new Date();
+                List<String> fareProducts = new ArrayList<>();
+                fareProducts.add(cursor.getString(0));
+                String time_iso = Utility.getISOCurrentDateTime(now);
+
+
+                Journey journey = new Journey(geometry, time_iso, "DepartAfter", fareProducts);
+                //String journeyPost = new Gson().toJson(journey);
+                //Log.i("Ygritte",new Gson().toJson(journey));
+                Call<ResponseBody> call = whereIsMyTransportApiClient.postJourney(journey);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        if (response.isSuccessful()) {
+                            try {
+                                String response_string = response.body().string();
+                                Log.i("Ygritte", "Response" + response_string);
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Log.i("Ygritte", "Response" + e.getMessage());
+                            }
+
+                        } else {
+                            Log.i("Ygritte", "Response Failed");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.i("Ygritte", "Response" + t.getMessage());
+                    }
+                });
+            }
         }
+    }
+
+
+    public Cursor getFareProduct() {
+
+        String[] FARE_PROJECTION = new String[]{
+                AreYengContract.FareProductEntry.COLUMN_ID,
+                AreYengContract.FareProductEntry.COLUMN_NAME,
+                AreYengContract.FareProductEntry.COLUMN_HREF,
+                AreYengContract.FareProductEntry.COLUMN_IS_DEFAULT,
+                AreYengContract.FareProductEntry.COLUMN_AGENCY_ID,
+        };
+
+        return getContentResolver().query(
+                AreYengContract.FareProductEntry.CONTENT_URI,
+                FARE_PROJECTION,
+                null,
+                null,
+                null);
     }
 }

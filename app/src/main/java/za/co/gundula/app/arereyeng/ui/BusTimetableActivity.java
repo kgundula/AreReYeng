@@ -45,6 +45,8 @@ import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.utils.RecylerViewDividerItemDecoration;
 
+import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
+
 public class BusTimetableActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.toolbar)
@@ -86,16 +88,25 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            //agency = bundle.getParcelable(agency_key);
-
+            agency = bundle.getParcelable(agency_key);
             String stop_id = bundle.getString(BusStopWidget.EXTRA_BUS_STOP_ID);
             String stop_name = bundle.getString(BusStopWidget.EXTRA_BUS_STOP_NAME);
 
             if (!"".equals(stop_id)) {
-                Log.i("Ygritte", "Stop ID :" + stop_id);
-                getBusTimeTable(stop_id, stop_name);
-            }
 
+                from_bus_station.setText(stop_name);
+                getBusTimeTable(stop_id, stop_name);
+
+            }
+        }
+
+        if (agency != null) {
+            from_bus_station.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    from_bus_station.showDropDown();
+                }
+            });
         }
 
         linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -180,7 +191,7 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("Ygritte", t.getMessage());
+                Log.i("Ygritte", "" + t.getMessage());
             }
         });
 

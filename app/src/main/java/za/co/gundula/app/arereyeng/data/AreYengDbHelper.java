@@ -64,11 +64,6 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
                 " UNIQUE ( " + AreYengContract.BusStopEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" + " );";
 
 
-        final String SQL_GEOMETRY_TABLE = "CREATE TABLE " + AreYengContract.GeometryEntry.TABLE_NAME + "(" +
-                AreYengContract.GeometryEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                AreYengContract.GeometryEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
-                " );";
-
         db.execSQL(SQL_CREATE_FARES_TABLE);
         db.execSQL(SQL_CREATE_AGENCY_TABLE);
         db.execSQL(SQL_CREATE_FARE_PRODUCT_TABLE);

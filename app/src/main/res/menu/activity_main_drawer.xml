@@ -11,18 +11,18 @@
             android:id="@+id/nav_fares"
             android:icon="@drawable/ic_menu_fare_calculator"
             android:title="@string/fare_calculator" />
-        <item
-            android:id="@+id/nav_journey"
-            android:icon="@drawable/ic_menu_journey_planner"
-            android:title="@string/plan_your_journey" />
+        <!-- <item
+             android:id="@+id/nav_journey"
+             android:icon="@drawable/ic_menu_journey_planner"
+             android:title="@string/plan_your_journey" /> -->
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_map"
             android:title="@string/areyeng_map" />
-        <item
+        <!-- <item
             android:id="@+id/nav_cards"
             android:icon="@drawable/ic_menu_nfc"
-            android:title="@string/areyeng_cards" />
+            android:title="@string/areyeng_cards" /> -->
     </group>
 
     <item android:title="@string/communicate">

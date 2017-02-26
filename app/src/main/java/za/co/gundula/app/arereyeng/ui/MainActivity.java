@@ -142,6 +142,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         getContentResolver().insert(AreYengContract.AgencyEntry.CONTENT_URI, agencyValues);
                         getContentResolver().notifyChange(AreYengContract.AgencyEntry.CONTENT_URI, null);
                         mSharedPrefEditor.putBoolean(Constants.agency_already_saved, true).apply();
+                        mSharedPrefEditor.putString(Constants.agency_id, agency[0].getId()).apply();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -196,7 +197,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         busStopValues.put(AreYengContract.BusStopEntry.COLUMN_MODES, String.valueOf(bus_modes.get(0)));
 
                         cVVector.add(busStopValues);
-                        Log.i("Ygritte", "Updating buses");
+
 
                     }
                     // add to database
@@ -291,10 +292,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Intent intent = new Intent(MainActivity.this, BusFareActivity.class);
             intent.putExtra(agency_key, agency_intent);
             startActivity(intent);
-        } else if (id == R.id.nav_journey) {
+        /*} else if (id == R.id.nav_journey) {
             Intent intent = new Intent(MainActivity.this, JourneyPlannerActivity.class);
             intent.putExtra(agency_key, agency_intent);
-            startActivity(intent);
+            startActivity(intent); */
         } else if (id == R.id.nav_bus_timetable) {
             Intent intent = new Intent(MainActivity.this, BusTimetableActivity.class);
             intent.putExtra(agency_key, agency_intent);
@@ -303,11 +304,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Intent intent = new Intent(MainActivity.this, AReYengMapActivity.class);
             intent.putExtra(agency_key, agency_intent);
             startActivity(intent);
-        } else if (id == R.id.nav_cards) {
+        }
+        /*else if (id == R.id.nav_cards) {
             Intent intent = new Intent(MainActivity.this, AReYengCardsActivity.class);
             intent.putExtra(agency_key, agency_intent);
             startActivity(intent);
         }
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -376,7 +379,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context.getApplicationContext());
         int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(this, BusStopWidgetService.class));
         if (ids.length > 0) {
-            Log.i("Ygritte", "Widget No : " + ids.length);
             appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.bus_stop_widget_layout);
         }
     }
