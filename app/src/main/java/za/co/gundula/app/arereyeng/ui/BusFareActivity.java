@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -288,9 +289,15 @@ public class BusFareActivity extends AppCompatActivity {
 
 
                 Journey journey = new Journey(geometry, time_iso, "DepartAfter", fareProducts);
-                //String journeyPost = new Gson().toJson(journey);
-                //Log.i("Ygritte",new Gson().toJson(journey));
-                Call<ResponseBody> call = whereIsMyTransportApiClient.postJourney(journey);
+                String journeyPost = new Gson().toJson(journey);
+                Log.i("Ygritte", new Gson().toJson(journey));
+                JSONObject journeyJSONObject = null;
+                try {
+                    journeyJSONObject = new JSONObject(journeyPost);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Call<ResponseBody> call = whereIsMyTransportApiClient.postJourney(journeyJSONObject);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -307,13 +314,14 @@ public class BusFareActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            Log.i("Ygritte", "Response Failed");
+                            Log.i("Ygritte", response.headers().toString());
+                            Log.i("Ygritte", "Response Failed : " + response.raw().toString());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.i("Ygritte", "Response" + t.getMessage());
+                        Log.i("Ygritte", "Response" + t.getLocalizedMessage());
                     }
                 });
             }

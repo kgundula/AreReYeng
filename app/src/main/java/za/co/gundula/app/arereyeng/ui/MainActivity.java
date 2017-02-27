@@ -195,9 +195,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         busStopValues.put(AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LONGITUDE, String.valueOf(coordinates.get(0)));
                         busStopValues.put(AreYengContract.BusStopEntry.COLUMN_GEOMETRY_LATITUDE, String.valueOf(coordinates.get(1)));
                         busStopValues.put(AreYengContract.BusStopEntry.COLUMN_MODES, String.valueOf(bus_modes.get(0)));
-
                         cVVector.add(busStopValues);
-
 
                     }
                     // add to database
