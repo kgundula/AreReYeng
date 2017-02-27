@@ -21,6 +21,7 @@ android {
             storePassword 'areyeng'
         }
     }
+
     buildTypes.each {
         it.buildConfigField 'String', 'AreYengClientKey', WhereIsMyTransportAreYengClientKey;
         it.buildConfigField 'String', 'AreYengSecretKey', WhereIsMyTransportAreYengSecretKey;
