@@ -5,7 +5,9 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="card_elavation">2dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
+    <dimen name="card_margin">4dp</dimen>
     <dimen name="card_elavation_raised">6dp</dimen>
 
     <!-- Dimens for text -->

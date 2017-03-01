@@ -148,8 +148,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             getBuses();
         }
 
-        //getAgencyFromDb();
-
         int columnCount = columns;
 
         gridLayoutManager = new GridLayoutManager(context, columnCount);
@@ -158,23 +156,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         bus_stop_favourites.setHasFixedSize(true);
 
     }
-
-    /*public void getAgencyFromDb() {
-        Uri agency_uri = AreYengContract.AgencyEntry.CONTENT_URI;
-
-        String[] AGENCY_PROJECTION = new String[]{
-                AreYengContract.AgencyEntry.COLUMN_ID,
-                AreYengContract.AgencyEntry.COLUMN_NAME,
-                AreYengContract.AgencyEntry.COLUMN_CULTURE,
-                AreYengContract.AgencyEntry.COLUMN_HREF
-        };
-
-        Cursor cursor = getContentResolver().query(agency_uri,AGENCY_PROJECTION,null,null,null);
-        if (cursor != null && cursor.moveToFirst()) {
-            agency_intent = new Agency(cursor.getString(COL_ID), cursor.getString(COL_NAME), cursor.getString(COL_CULTURE), cursor.getString(COL_HREF));
-        }
-    }
-    */
 
     public void showSnackBar(String message) {
         Snackbar.make(content_main, message, Snackbar.LENGTH_LONG).show();
