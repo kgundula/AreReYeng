@@ -304,11 +304,11 @@ public class BusFareActivity extends AppCompatActivity {
 
                     Geometry geometry = new Geometry("MultiPoint", coordinates);
 
-                    Date now = new Date();
                     List<String> fareProducts = new ArrayList<>();
                     fareProducts.add(cursor.getString(0));
-                    String time_iso = Utility.getISOCurrentDateTime(now);
 
+                    Date now = new Date();
+                    String time_iso = Utility.getISOCurrentDateTime(now);
 
                     Journey journey = new Journey(geometry, time_iso, "DepartAfter", fareProducts);
                     String journeyPost = new Gson().toJson(journey);

@@ -20,6 +20,7 @@ public class AreYengContract {
     public static final String PATH_BUS_STOP = "bus_stops";
     public static final String PATH_FARE_PRODUCT = "fare_product";
     public static final String PATH_GEOMETRY = "geometry";
+    public static final String PATH_FAVOURITES = "favourites_stop";
 
     public static final class FaresEntry implements BaseColumns {
 
@@ -140,10 +141,28 @@ public class AreYengContract {
             return ContentUris.withAppendedId(CONTENT_URI, _id);
         }
 
-
     }
 
+    public static final class FavoritesBusEntry implements BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_FAVOURITES).build();
 
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FAVOURITES;
+
+        // Table name
+        public static final String TABLE_NAME = "favourites_bus_stops";
+
+        public static final String COLUMN_ID = "id";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DATE_CREATED = "date_created";
+
+        public static Uri buildFavouriteBusStopUri(long _id) {
+            return ContentUris.withAppendedId(CONTENT_URI, _id);
+        }
+    }
 
 
 }

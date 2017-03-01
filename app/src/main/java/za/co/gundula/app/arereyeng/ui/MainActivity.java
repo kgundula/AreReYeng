@@ -23,6 +23,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +43,7 @@ import org.json.JSONObject;
 
 import java.util.Vector;
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
@@ -48,6 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import za.co.gundula.app.arereyeng.R;
+import za.co.gundula.app.arereyeng.adapter.FavouritesBusStopRecyclerViewAdapter;
 import za.co.gundula.app.arereyeng.data.AreYengContract;
 import za.co.gundula.app.arereyeng.model.Agency;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
@@ -55,6 +59,7 @@ import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.sync.AreYengSyncAdapter;
 import za.co.gundula.app.arereyeng.utils.CircleTransform;
 import za.co.gundula.app.arereyeng.utils.Constants;
+import za.co.gundula.app.arereyeng.utils.RecylerViewDividerItemDecoration;
 import za.co.gundula.app.arereyeng.utils.Utility;
 
 import static za.co.gundula.app.arereyeng.R.id.drawer_layout;
@@ -78,18 +83,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.info_text)
     TextView info_text;
 
+    @BindView(R.id.bus_stop_favourites)
+    RecyclerView bus_stop_favourites;
+
     SharedPreferences mSharedPref;
     SharedPreferences.Editor mSharedPrefEditor;
+
+    @BindInt(R.integer.num_columns)
+    int columns;
 
     Context context;
     boolean is_agency_already_saved = false;
 
-    private static final int AGENCY_LOADER = 0;
+    private static final int FAVOURITE_LOADER = 0;
+    private static final int AGENCY_LOADER = 1;
+
     private static final int COL_ID = 0;
     private static final int COL_NAME = 1;
     private static final int COL_CULTURE = 2;
     private static final int COL_HREF = 3;
 
+    GridLayoutManager gridLayoutManager;
+    FavouritesBusStopRecyclerViewAdapter favouritesBusStopRecyclerViewAdapter;
 
     WhereIsMyTransportApiClientInterface whereIsMyTransportApiClient;
     Agency[] agency;
@@ -124,13 +139,42 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             getSupportLoaderManager().initLoader(AGENCY_LOADER, null, this);
         }
 
+        getSupportLoaderManager().initLoader(FAVOURITE_LOADER, null, this);
+
         NetworkInfo networkInfo = Utility.getNetworkWorkInfo(context);
         if (networkInfo != null && !networkInfo.isAvailable()) {
             showSnackBar(getString(R.string.no_network_error));
         } else {
             getBuses();
         }
+
+        //getAgencyFromDb();
+
+        int columnCount = columns;
+
+        gridLayoutManager = new GridLayoutManager(context, columnCount);
+        bus_stop_favourites.setLayoutManager(gridLayoutManager);
+        bus_stop_favourites.addItemDecoration(new RecylerViewDividerItemDecoration(context));
+        bus_stop_favourites.setHasFixedSize(true);
+
     }
+
+    /*public void getAgencyFromDb() {
+        Uri agency_uri = AreYengContract.AgencyEntry.CONTENT_URI;
+
+        String[] AGENCY_PROJECTION = new String[]{
+                AreYengContract.AgencyEntry.COLUMN_ID,
+                AreYengContract.AgencyEntry.COLUMN_NAME,
+                AreYengContract.AgencyEntry.COLUMN_CULTURE,
+                AreYengContract.AgencyEntry.COLUMN_HREF
+        };
+
+        Cursor cursor = getContentResolver().query(agency_uri,AGENCY_PROJECTION,null,null,null);
+        if (cursor != null && cursor.moveToFirst()) {
+            agency_intent = new Agency(cursor.getString(COL_ID), cursor.getString(COL_NAME), cursor.getString(COL_CULTURE), cursor.getString(COL_HREF));
+        }
+    }
+    */
 
     public void showSnackBar(String message) {
         Snackbar.make(content_main, message, Snackbar.LENGTH_LONG).show();
@@ -345,6 +389,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
+        getSupportLoaderManager().restartLoader(FAVOURITE_LOADER, null, this);
         getSupportLoaderManager().restartLoader(AGENCY_LOADER, null, this);
     }
 
@@ -356,32 +401,53 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        Uri agency_uri = AreYengContract.AgencyEntry.CONTENT_URI;
+        CursorLoader cursor = null;
+        if (id == FAVOURITE_LOADER) {
+            Uri favourite_uri = AreYengContract.FavoritesBusEntry.CONTENT_URI;
 
-        String[] AGENCY_PROJECTION = new String[]{
-                AreYengContract.AgencyEntry.COLUMN_ID,
-                AreYengContract.AgencyEntry.COLUMN_NAME,
-                AreYengContract.AgencyEntry.COLUMN_CULTURE,
-                AreYengContract.AgencyEntry.COLUMN_HREF
-        };
+            String[] FAVOURITE_PROJECTION = new String[]{
+                    AreYengContract.FavoritesBusEntry.COLUMN_ID,
+                    AreYengContract.FavoritesBusEntry.COLUMN_NAME,
+                    AreYengContract.FavoritesBusEntry.COLUMN_DATE_CREATED
+            };
 
-        return new CursorLoader(
-                this,
-                agency_uri,
-                AGENCY_PROJECTION,
-                null,
-                null,
-                null
-        );
+            cursor = new CursorLoader(this, favourite_uri, FAVOURITE_PROJECTION, null, null, null);
+        } else if (id == AGENCY_LOADER) {
+            Uri agency_uri = AreYengContract.AgencyEntry.CONTENT_URI;
 
+            String[] AGENCY_PROJECTION = new String[]{
+                    AreYengContract.AgencyEntry.COLUMN_ID,
+                    AreYengContract.AgencyEntry.COLUMN_NAME,
+                    AreYengContract.AgencyEntry.COLUMN_CULTURE,
+                    AreYengContract.AgencyEntry.COLUMN_HREF
+            };
+
+            cursor = new CursorLoader(this, agency_uri, AGENCY_PROJECTION, null, null, null);
+        }
+
+        return cursor;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (data != null && data.moveToFirst()) {
-            agency_intent = new Agency(data.getString(COL_ID), data.getString(COL_NAME), data.getString(COL_CULTURE), data.getString(COL_HREF));
+        if (loader.getId() == FAVOURITE_LOADER) {
+
+            if (data != null && data.moveToFirst()) {
+                //Log.i("Ygritte", DatabaseUtils.dumpCursorToString(data));
+                favouritesBusStopRecyclerViewAdapter = new FavouritesBusStopRecyclerViewAdapter(context, data);
+                favouritesBusStopRecyclerViewAdapter.notifyDataSetChanged();
+                bus_stop_favourites.setAdapter(favouritesBusStopRecyclerViewAdapter);
+
+            }
+
+        } else if (loader.getId() == AGENCY_LOADER) {
+
+            if (data != null && data.moveToFirst()) {
+                agency_intent = new Agency(data.getString(COL_ID), data.getString(COL_NAME), data.getString(COL_CULTURE), data.getString(COL_HREF));
+            }
         }
+
     }
 
     @Override
@@ -397,6 +463,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.bus_stop_widget_layout);
         }
     }
+
 }
 
 

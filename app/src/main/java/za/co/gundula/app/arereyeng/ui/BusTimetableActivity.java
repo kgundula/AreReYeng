@@ -1,5 +1,6 @@
 package za.co.gundula.app.arereyeng.ui;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,6 +46,7 @@ import za.co.gundula.app.arereyeng.model.BusTimeTable;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClient;
 import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.utils.RecylerViewDividerItemDecoration;
+import za.co.gundula.app.arereyeng.utils.Utility;
 
 import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
 
@@ -144,7 +147,7 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
     }
 
 
-    public void getBusTimeTable(String stop_id, String stop_name) {
+    public void getBusTimeTable(final String stop_id, final String stop_name) {
 
 
         Call<ResponseBody> call = whereIsMyTransportApiClient.getStopTimetable(stop_id);
@@ -154,12 +157,23 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
 
                 if (response.isSuccessful()) {
 
-                    //for (int i = 0; i < response.body()/.size(); i++) {
                     BusTimeTable busTimeTable = null;
                     BusLine busLine = null;
                     try {
                         String timetables = response.body().string();
                         JSONArray time_tables = new JSONArray(timetables);
+
+                        Date now = new Date();
+                        String time_iso = Utility.getISOCurrentDateTime(now);
+
+                        ContentValues favouriteBusStopValues = new ContentValues();
+                        favouriteBusStopValues.put(AreYengContract.FavoritesBusEntry.COLUMN_ID, stop_id);
+                        favouriteBusStopValues.put(AreYengContract.FavoritesBusEntry.COLUMN_NAME, stop_name);
+                        favouriteBusStopValues.put(AreYengContract.FavoritesBusEntry.COLUMN_DATE_CREATED, time_iso);
+
+                        getContentResolver().insert(AreYengContract.FavoritesBusEntry.CONTENT_URI, favouriteBusStopValues);
+                        getContentResolver().notifyChange(AreYengContract.FavoritesBusEntry.CONTENT_URI, null);
+
                         busTimeTableList = new ArrayList<BusTimeTable>();
                         for (int i = 0; i < time_tables.length(); i++) {
                             Gson bus_timetable_gson = new Gson();
@@ -184,7 +198,6 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    //}
 
                 }
             }

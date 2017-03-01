@@ -97,7 +97,7 @@
 
 
     <string name="search_for">Enter any two stops and get a breakdown of distance and cost to travel between them.</string>
-    <string name="favourites">Below is the stops you recently searched for.</string>
+    <string name="favourites">Below you\'ll find the bus stops you searched for.</string>
     <string name="same_stations">Source station and destination station cannot be the same.</string>
     <string name="select_stop">Select a stop </string>
     <string name="time">Time</string>

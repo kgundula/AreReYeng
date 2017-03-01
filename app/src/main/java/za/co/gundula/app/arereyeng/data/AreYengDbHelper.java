@@ -63,11 +63,19 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
                 AreYengContract.BusStopEntry.COLUMN_MODES + " BOOLEAN NOT NULL, " +
                 " UNIQUE ( " + AreYengContract.BusStopEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" + " );";
 
+        final String SQL_CREATE_FAVOURITE_TABLE = "CREATE TABLE " + AreYengContract.FavoritesBusEntry.TABLE_NAME + "(" +
+                AreYengContract.FavoritesBusEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                AreYengContract.FavoritesBusEntry.COLUMN_ID + " TEXT UNIQUE NOT NULL, " +
+                AreYengContract.FavoritesBusEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                AreYengContract.FavoritesBusEntry.COLUMN_DATE_CREATED + " TEXT NOT NULL, " +
+                " UNIQUE ( " + AreYengContract.FavoritesBusEntry.COLUMN_ID + " ) ON CONFLICT IGNORE" +
+                " );";
 
         db.execSQL(SQL_CREATE_FARES_TABLE);
         db.execSQL(SQL_CREATE_AGENCY_TABLE);
         db.execSQL(SQL_CREATE_FARE_PRODUCT_TABLE);
         db.execSQL(SQL_CREATE_BUS_STOP_TABLE);
+        db.execSQL(SQL_CREATE_FAVOURITE_TABLE);
     }
 
     @Override
@@ -76,6 +84,7 @@ public class AreYengDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.AgencyEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.BusStopEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.FareProductEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + AreYengContract.FavoritesBusEntry.TABLE_NAME);
         onCreate(db);
     }
 }

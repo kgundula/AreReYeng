@@ -28,6 +28,8 @@ public class AreYengContentProvider extends ContentProvider {
     static final int BUS_STOP_ID = 301;
     static final int PRODUCT_FARE = 400;
     static final int PRODUCT_FARE_ID = 401;
+    static final int FAVOURITES_STOPS = 500;
+    static final int FAVOURITES_STOPS_ID = 501;
 
 
     static UriMatcher buildUriMatcher() {
@@ -49,6 +51,8 @@ public class AreYengContentProvider extends ContentProvider {
         matcher.addURI(authority, AreYengContract.PATH_BUS_STOP + "/*", BUS_STOP_ID);
         matcher.addURI(authority, AreYengContract.PATH_FARE_PRODUCT, PRODUCT_FARE);
         matcher.addURI(authority, AreYengContract.PATH_FARE_PRODUCT + "/*", PRODUCT_FARE_ID);
+        matcher.addURI(authority, AreYengContract.PATH_FAVOURITES, FAVOURITES_STOPS);
+        matcher.addURI(authority, AreYengContract.PATH_FAVOURITES + "/*", FAVOURITES_STOPS_ID);
         return matcher;
     }
 
@@ -113,6 +117,18 @@ public class AreYengContentProvider extends ContentProvider {
                 );
                 break;
             }
+            case FAVOURITES_STOPS: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        AreYengContract.FavoritesBusEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -142,6 +158,10 @@ public class AreYengContentProvider extends ContentProvider {
                 return AreYengContract.FareProductEntry.CONTENT_ITEM_TYPE;
             case PRODUCT_FARE:
                 return AreYengContract.FareProductEntry.CONTENT_TYPE;
+            case FAVOURITES_STOPS_ID:
+                return AreYengContract.FavoritesBusEntry.CONTENT_ITEM_TYPE;
+            case FAVOURITES_STOPS:
+                return AreYengContract.FavoritesBusEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -190,6 +210,14 @@ public class AreYengContentProvider extends ContentProvider {
                 break;
             }
 
+            case FAVOURITES_STOPS: {
+                long _id = db.insert(AreYengContract.FavoritesBusEntry.TABLE_NAME, null, values);
+                if (_id > 0)
+                    aReYengUri = AreYengContract.FavoritesBusEntry.buildFavouriteBusStopUri(_id);
+                else
+                    throw new SQLException("Failed to insert new row into :" + uri);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown Uri" + uri);
         }
@@ -216,6 +244,9 @@ public class AreYengContentProvider extends ContentProvider {
                 break;
             case PRODUCT_FARE:
                 deleted = db.delete(AreYengContract.FareProductEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case FAVOURITES_STOPS:
+                deleted = db.delete(AreYengContract.FavoritesBusEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -250,6 +281,10 @@ public class AreYengContentProvider extends ContentProvider {
             }
             case PRODUCT_FARE: {
                 updated = db.update(AreYengContract.FareProductEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            }
+            case FAVOURITES_STOPS: {
+                updated = db.update(AreYengContract.FavoritesBusEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             }
             default:
