@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import za.co.gundula.app.arereyeng.BuildConfig;
@@ -29,9 +30,12 @@ public class WhereIsMyTransportApiClient {
             String bearer = mSharedPref.getString(Constants.token_type, "");
 
             RetrofitInterceptor retrofitInterceptor = new RetrofitInterceptor(token, bearer);
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
             httpClient.addNetworkInterceptor(retrofitInterceptor);
+            //httpClient.interceptors().add(logging);
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())

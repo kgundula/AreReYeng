@@ -63,7 +63,7 @@
                 android:paddingRight="@dimen/edit_text_padding"
                 android:paddingLeft="@dimen/edit_text_padding" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -75,6 +75,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:padding="@dimen/activity_horizontal_margin"
+                    android:layout_centerInParent="true"
                     android:visibility="gone"
                     tools:visibility="visible" />
 
@@ -82,7 +83,7 @@
                     android:id="@+id/linear_detail"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:padding="@dimen/edit_text_padding">
 
@@ -90,53 +91,90 @@
                         android:id="@+id/journey_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:text="@string/detail_journey"
                         android:paddingTop="@dimen/edit_text_padding"
                         android:paddingBottom="@dimen/edit_text_padding" />
 
-                    <TextView
-                        android:id="@+id/journey_time_heading"
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/time" />
-
-                    <TextView
-                        android:id="@+id/journey_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_margin="@dimen/text_margin">
 
 
-                    <TextView
-                        android:id="@+id/cost_heading"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/distance"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="@color/secondary_text" />
+
+                        <TextView
+
+                            android:id="@+id/journey_distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:textColor="@color/secondary_text" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/cost" />
+                        android:layout_margin="@dimen/text_margin">
+
+                        <TextView
+                            android:id="@+id/duration_heading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                            android:text="@string/duration" />
+
+                        <TextView
+                            android:id="@+id/journey_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/journey_cost"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/stations"
+                        android:id="@+id/fare_type"
+                        android:layout_margin="@dimen/text_margin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                        android:text="@string/stations"
-                        android:paddingTop="@dimen/edit_text_padding"
-                        android:paddingBottom="@dimen/edit_text_padding" />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/station_recycler_view"
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                    </android.support.v7.widget.RecyclerView>
+                        <TextView
+                            android:id="@+id/cost_heading"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cost" />
+
+                        <TextView
+                            android:id="@+id/journey_cost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/error_message"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

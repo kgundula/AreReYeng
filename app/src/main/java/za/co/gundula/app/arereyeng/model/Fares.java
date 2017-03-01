@@ -7,14 +7,14 @@ package za.co.gundula.app.arereyeng.model;
 public class Fares {
 
     private String description;
-    private String fareProduct;
+    private FareProduct fareProduct;
     private String cost;
     private String messages;
 
     public Fares() {
     }
 
-    public Fares(String description, String fareProduct, String cost, String messages) {
+    public Fares(String description, FareProduct fareProduct, String cost, String messages) {
         this.description = description;
         this.fareProduct = fareProduct;
         this.cost = cost;
@@ -29,11 +29,11 @@ public class Fares {
         this.description = description;
     }
 
-    public String getFareProduct() {
+    public FareProduct getFareProduct() {
         return fareProduct;
     }
 
-    public void setFareProduct(String fareProduct) {
+    public void setFareProduct(FareProduct fareProduct) {
         this.fareProduct = fareProduct;
     }
 

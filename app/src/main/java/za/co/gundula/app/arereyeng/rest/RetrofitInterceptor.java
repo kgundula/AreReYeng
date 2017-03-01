@@ -31,7 +31,6 @@ public class RetrofitInterceptor implements Interceptor {
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("Authorization", bearer + " " + token);
         builder.addHeader("Accept", "application/json");
-        builder.addHeader("Content-Type", "application/json");
         return chain.proceed(builder.build());
     }
 }

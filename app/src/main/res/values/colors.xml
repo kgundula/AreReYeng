@@ -5,6 +5,7 @@
     <color name="colorAccent">#3AB54A</color>
 
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#FF0000</color>
     <color name="colorLineDivider">#B6B6B6</color>
 
     <color name="grey_700">#646464</color>

@@ -18,11 +18,10 @@ import java.util.Locale;
 public class Utility {
 
 
-    public NetworkInfo getNetworkWorkInfo(Context context) {
+    public static NetworkInfo getNetworkWorkInfo(Context context) {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo;
+        return connectivityManager.getActiveNetworkInfo();
 
     }
 

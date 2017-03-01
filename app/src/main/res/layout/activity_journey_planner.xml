@@ -65,8 +65,6 @@
             android:paddingRight="@dimen/edit_text_padding"
             android:paddingLeft="@dimen/edit_text_padding" />
 
-
-
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

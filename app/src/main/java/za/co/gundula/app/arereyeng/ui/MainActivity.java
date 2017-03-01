@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -52,7 +55,9 @@ import za.co.gundula.app.arereyeng.rest.WhereIsMyTransportApiClientInterface;
 import za.co.gundula.app.arereyeng.sync.AreYengSyncAdapter;
 import za.co.gundula.app.arereyeng.utils.CircleTransform;
 import za.co.gundula.app.arereyeng.utils.Constants;
+import za.co.gundula.app.arereyeng.utils.Utility;
 
+import static za.co.gundula.app.arereyeng.R.id.drawer_layout;
 import static za.co.gundula.app.arereyeng.utils.Constants.agency_key;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
@@ -63,6 +68,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+
+    @BindView(R.id.content_main)
+    CoordinatorLayout content_main;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -116,7 +124,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             getSupportLoaderManager().initLoader(AGENCY_LOADER, null, this);
         }
 
-        getBuses();
+        NetworkInfo networkInfo = Utility.getNetworkWorkInfo(context);
+        if (networkInfo != null && !networkInfo.isAvailable()) {
+            showSnackBar(getString(R.string.no_network_error));
+        } else {
+            getBuses();
+        }
+    }
+
+    public void showSnackBar(String message) {
+        Snackbar.make(content_main, message, Snackbar.LENGTH_LONG).show();
     }
 
     public void getAgency() {
@@ -255,7 +272,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -310,7 +327,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         */
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -7,8 +7,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,14 +69,26 @@ public class BusFareActivity extends AppCompatActivity {
     @BindView(R.id.linear_detail)
     LinearLayout linear_detail;
 
-    @BindView(R.id.journey_time)
-    TextView journey_time;
+    @BindView(R.id.journey_detail)
+    TextView detail_journey;
 
-    @BindView(R.id.station_recycler_view)
-    RecyclerView station_recycler_view;
+    @BindView(R.id.journey_cost)
+    TextView journey_cost;
+
+    @BindView(R.id.journey_distance)
+    TextView journey_distance;
+
+    @BindView(R.id.journey_duration)
+    TextView journey_duration;
+
+    @BindView(R.id.fare_type)
+    TextView fare_type;
 
     @BindView(R.id.info_text)
     TextView info_text;
+
+    @BindView(R.id.error_message)
+    TextView error_message;
 
     Agency agency = null;
 
@@ -111,6 +124,11 @@ public class BusFareActivity extends AppCompatActivity {
 
     boolean is_are_product_already_saved = false;
     String agency_id = "";
+
+    public final static String itineraries = "itineraries";
+    public final static String legs = "legs";
+    public final static String fare = "fare";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +208,7 @@ public class BusFareActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i("Ygritte", t.getMessage());
+                Log.i("Ygritte", "" + t.getMessage());
             }
         });
     }
@@ -257,75 +275,158 @@ public class BusFareActivity extends AppCompatActivity {
     public void searchBusFare() {
 
         if (!"".equals(from_busstation) && !"".equals(to_busstation)) {
-            Cursor cursor = getFareProduct();
-            if (cursor != null && cursor.moveToFirst()) {
 
-                Log.i("Ygritte", "Fare ID " + cursor.getString(0));
+            if (from_bus_station.equals(to_bus_station)) {
+                showErrorView(getString(R.string.same_stations));
+            } else {
+                Cursor cursor = getFareProduct();
+                if (cursor != null && cursor.moveToFirst()) {
+                    progressBar.setIndeterminate(true);
+                    progressBar.setVisibility(View.VISIBLE);
 
-                double from_lat = Double.valueOf(stopLatitudeMap.get(from_busstation));
-                double from_longi = Double.valueOf(stopLongitudeMap.get(from_busstation));
+                    double from_lat = Double.valueOf(stopLatitudeMap.get(from_busstation));
+                    double from_longi = Double.valueOf(stopLongitudeMap.get(from_busstation));
 
-                double to_lat = Double.valueOf(stopLatitudeMap.get(to_busstation));
-                double to_longi = Double.valueOf(stopLongitudeMap.get(to_busstation));
+                    double to_lat = Double.valueOf(stopLatitudeMap.get(to_busstation));
+                    double to_longi = Double.valueOf(stopLongitudeMap.get(to_busstation));
 
-                List<Double> fromCoordinates = new ArrayList<>();
-                fromCoordinates.add(from_longi);
-                fromCoordinates.add(from_lat);
+                    List<Double> fromCoordinates = new ArrayList<>();
+                    fromCoordinates.add(from_longi);
+                    fromCoordinates.add(from_lat);
 
-                List<Double> toCoordinates = new ArrayList<>();
-                toCoordinates.add(to_longi);
-                toCoordinates.add(to_lat);
+                    List<Double> toCoordinates = new ArrayList<>();
+                    toCoordinates.add(to_longi);
+                    toCoordinates.add(to_lat);
 
-                List<List<Double>> coordinates = new ArrayList<>();
-                coordinates.add(fromCoordinates);
-                coordinates.add(toCoordinates);
+                    List<List<Double>> coordinates = new ArrayList<>();
+                    coordinates.add(fromCoordinates);
+                    coordinates.add(toCoordinates);
 
-                Geometry geometry = new Geometry("MultiPoint", coordinates);
+                    Geometry geometry = new Geometry("MultiPoint", coordinates);
 
-                Date now = new Date();
-                List<String> fareProducts = new ArrayList<>();
-                fareProducts.add(cursor.getString(0));
-                String time_iso = Utility.getISOCurrentDateTime(now);
-
-
-                Journey journey = new Journey(geometry, time_iso, "DepartAfter", fareProducts);
-                String journeyPost = new Gson().toJson(journey);
-                Log.i("Ygritte", new Gson().toJson(journey));
-                JSONObject journeyJSONObject = null;
-                try {
-                    journeyJSONObject = new JSONObject(journeyPost);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Call<ResponseBody> call = whereIsMyTransportApiClient.postJourney(journeyJSONObject);
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                        if (response.isSuccessful()) {
-                            try {
-                                String response_string = response.body().string();
-                                Log.i("Ygritte", "Response" + response_string);
+                    Date now = new Date();
+                    List<String> fareProducts = new ArrayList<>();
+                    fareProducts.add(cursor.getString(0));
+                    String time_iso = Utility.getISOCurrentDateTime(now);
 
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                Log.i("Ygritte", "Response" + e.getMessage());
+                    Journey journey = new Journey(geometry, time_iso, "DepartAfter", fareProducts);
+                    String journeyPost = new Gson().toJson(journey);
+                    Log.i("Ygritte", journeyPost);
+                    Call<ResponseBody> call = whereIsMyTransportApiClient.calculateJourneyFare(journey);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                            if (response.isSuccessful()) {
+
+                                try {
+                                    double fare_cost = 0.0;
+                                    int itenerary_distance = 0;
+                                    int itenerary_duration = 0;
+                                    String itenarary_duration_unit = "m";
+                                    String fare_description = "";
+
+                                    String response_string = response.body().string();
+                                    JSONObject journeyObject = new JSONObject(response_string);
+                                    // Get Itineraries
+                                    String itinerary = journeyObject.getString(itineraries);
+                                    JSONArray itinerariesArray = new JSONArray(itinerary);
+                                    for (int i = 0; i < itinerariesArray.length(); i++) {
+                                        JSONObject itineraryObject = (JSONObject) itinerariesArray.get(i);
+                                        JSONObject distance = itineraryObject.getJSONObject("distance");
+
+                                        itenerary_distance += distance.getInt("value");
+                                        itenarary_duration_unit = distance.getString("unit");
+
+                                        itenerary_duration += itineraryObject.getInt("duration");
+
+                                        if (itineraryObject.has("legs")) {
+                                            //Log.i("Ygritte", itineraryObject.toString());
+
+
+                                            String legs = itineraryObject.getString("legs");
+                                            JSONArray legsArray = new JSONArray(legs);
+
+                                            for (int x = 0; x < legsArray.length(); x++) {
+                                                JSONObject leg = (JSONObject) legsArray.get(x);
+                                                String transit_type = leg.getString("type");
+                                                if ("Transit".equals(transit_type)) {
+
+                                                    JSONObject fareObject = leg.getJSONObject("fare");
+                                                    JSONObject costObject = fareObject.getJSONObject("cost");
+                                                    fare_cost += costObject.getDouble("amount");
+                                                    fare_description = fareObject.getString("description");
+                                                }
+                                                //"fare":{"description":"Default fare","fareProduct":{"id":"fSlKJlDHKEiGXPwXwUu_rA","href":"https:\/\/platform.whereismytransport.com\/api\/fareproducts\/fSlKJlDHKEiGXPwXwUu_rA","agency":{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https:\/\/platform.whereismytransport.com\/api\/agencies\/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en"},"name":"Standard","isDefault":true},"cost":{"amount":9.5,"currencyCode":"ZAR"},"messages":[]}
+                                            }
+                                        }
+                                    }
+                                    showJourneyFare(fare_cost, itenerary_distance, itenerary_duration, itenarary_duration_unit, fare_description);
+
+                                } catch (IOException e) {
+                                    showErrorView(e.getMessage());
+                                } catch (JSONException e) {
+                                    showErrorView(e.getMessage());
+                                }
+
+                            } else {
+                                showErrorView(response.raw().toString());
                             }
-
-                        } else {
-                            Log.i("Ygritte", response.headers().toString());
-                            Log.i("Ygritte", "Response Failed : " + response.raw().toString());
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.i("Ygritte", "Response" + t.getLocalizedMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            showErrorView(t.getMessage());
+                        }
+                    });
+                }
             }
         }
+    }
+
+
+    public void showErrorView(String message) {
+
+        progressBar.setVisibility(View.GONE);
+        error_message.setText(message);
+        error_message.setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        error_message.setVisibility(View.VISIBLE);
+        linear_detail.setVisibility(View.GONE);
+    }
+
+    /*
+    double fare_cost = 0.0;
+    int itenerary_distance = 0;
+    int itenerary_duration = 0;
+    String itenarary_duration_unit = "m";
+    String fare_description = "";
+     */
+    public void showJourneyFare(double cost, int itenerary_distance, int itenerary_duration, String itenarary_duration_unit, String fare_description) {
+
+        error_message.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        linear_detail.setVisibility(View.VISIBLE);
+
+        String journey_from_to = from_busstation + " to " + to_busstation;
+        detail_journey.setText(journey_from_to);
+
+        String j_cost = String.format(Locale.ENGLISH, "%10.2f", cost);
+        journey_cost.setText(j_cost);
+
+        String distance_km = String.valueOf(itenerary_distance / 1000);
+        String estimated_distance = distance_km + " KM";
+        journey_distance.setText(estimated_distance);
+
+        int num_hours = (itenerary_duration % 86400) / 3600;
+        int num_minutes = ((itenerary_duration % 86400) % 3600) / 60;
+        int num_seconds = ((itenerary_duration % 86400) % 3600) % 60;
+
+        String estimated_travel_time = num_hours + " Hours " + num_minutes + " Minutes " + num_seconds + " Seconds";
+
+        journey_duration.setText(estimated_travel_time);
+        fare_type.setText(fare_description);
+
     }
 
 
@@ -345,5 +446,11 @@ public class BusFareActivity extends AppCompatActivity {
                 null,
                 null,
                 null);
+    }
+
+    public void busFareErrorView() {
+        //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mContext);
+        //@StockTaskService.StockStatus int stockStatus = sp.getInt(getString(R.string.stock_status), -1);
+        //String message = getString(R.string.empty_data) + " ";
     }
 }

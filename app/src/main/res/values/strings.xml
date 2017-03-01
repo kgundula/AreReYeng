@@ -98,11 +98,13 @@
 
     <string name="search_for">Enter any two stops and get a breakdown of distance and cost to travel between them.</string>
     <string name="favourites">Below is the stops you recently searched for.</string>
+    <string name="same_stations">Source station and destination station cannot be the same.</string>
     <string name="select_stop">Select a stop </string>
     <string name="time">Time</string>
-    <string name="cost">Cost</string>
+    <string name="distance">Distance : </string>
+    <string name="cost">Cost : </string>
     <string name="stations">Stations</string>
-    <string name="detail_journey">Detail Journey</string>
+    <string name="detail_journey">Fare Cost</string>
     <string name="previous_calculations">No previous fare calculated</string>
     <string name="select_bus_stop">Select a bus stop to show the bus timetable</string>
     <string name="appwidget_text">EXAMPLE</string>
@@ -112,6 +114,7 @@
     <string name="title_widget_bus_stop">Are Yeng</string>
     <string name="listview_widget">Widget listview</string>
     <string name="empty_data">Data not available</string>
+    <string name="duration">Duration :</string>
 
 
 </resources>
