@@ -125,9 +125,18 @@ public class BusFareActivity extends AppCompatActivity {
     boolean is_are_product_already_saved = false;
     String agency_id = "";
 
-    public final static String itineraries = "itineraries";
-    public final static String legs = "legs";
-    public final static String fare = "fare";
+    public final static String itineraries_key = "itineraries";
+    public final static String legs_key = "legs";
+    public final static String fare_key = "fare";
+    public final static String distance_key = "distance";
+    public final static String description_key = "description";
+    public final static String amount_key = "amount";
+    public final static String cost_key = "cost";
+    public final static String type_key = "type";
+    public final static String value_key = "value";
+    public final static String unit_key = "unit";
+    public final static String duration_key = "duration";
+
 
 
     @Override
@@ -312,7 +321,6 @@ public class BusFareActivity extends AppCompatActivity {
 
                     Journey journey = new Journey(geometry, time_iso, "DepartAfter", fareProducts);
                     String journeyPost = new Gson().toJson(journey);
-                    Log.i("Ygritte", journeyPost);
                     Call<ResponseBody> call = whereIsMyTransportApiClient.calculateJourneyFare(journey);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -330,33 +338,31 @@ public class BusFareActivity extends AppCompatActivity {
                                     String response_string = response.body().string();
                                     JSONObject journeyObject = new JSONObject(response_string);
                                     // Get Itineraries
-                                    String itinerary = journeyObject.getString(itineraries);
+                                    String itinerary = journeyObject.getString(itineraries_key);
                                     JSONArray itinerariesArray = new JSONArray(itinerary);
                                     for (int i = 0; i < itinerariesArray.length(); i++) {
                                         JSONObject itineraryObject = (JSONObject) itinerariesArray.get(i);
-                                        JSONObject distance = itineraryObject.getJSONObject("distance");
+                                        JSONObject distance = itineraryObject.getJSONObject(distance_key);
 
-                                        itenerary_distance += distance.getInt("value");
-                                        itenarary_duration_unit = distance.getString("unit");
+                                        itenerary_distance += distance.getInt(value_key);
+                                        itenarary_duration_unit = distance.getString(unit_key);
 
-                                        itenerary_duration += itineraryObject.getInt("duration");
+                                        itenerary_duration += itineraryObject.getInt(duration_key);
 
-                                        if (itineraryObject.has("legs")) {
-                                            //Log.i("Ygritte", itineraryObject.toString());
+                                        if (itineraryObject.has(legs_key)) {
 
-
-                                            String legs = itineraryObject.getString("legs");
+                                            String legs = itineraryObject.getString(legs_key);
                                             JSONArray legsArray = new JSONArray(legs);
 
                                             for (int x = 0; x < legsArray.length(); x++) {
                                                 JSONObject leg = (JSONObject) legsArray.get(x);
-                                                String transit_type = leg.getString("type");
+                                                String transit_type = leg.getString(type_key);
                                                 if ("Transit".equals(transit_type)) {
 
-                                                    JSONObject fareObject = leg.getJSONObject("fare");
-                                                    JSONObject costObject = fareObject.getJSONObject("cost");
-                                                    fare_cost += costObject.getDouble("amount");
-                                                    fare_description = fareObject.getString("description");
+                                                    JSONObject fareObject = leg.getJSONObject(fare_key);
+                                                    JSONObject costObject = fareObject.getJSONObject(cost_key);
+                                                    fare_cost += costObject.getDouble(amount_key);
+                                                    fare_description = fareObject.getString(description_key);
                                                 }
                                                 //"fare":{"description":"Default fare","fareProduct":{"id":"fSlKJlDHKEiGXPwXwUu_rA","href":"https:\/\/platform.whereismytransport.com\/api\/fareproducts\/fSlKJlDHKEiGXPwXwUu_rA","agency":{"id":"A1JHSPIg_kWV5XRHIepCLw","href":"https:\/\/platform.whereismytransport.com\/api\/agencies\/A1JHSPIg_kWV5XRHIepCLw","name":"A Re Yeng","culture":"en"},"name":"Standard","isDefault":true},"cost":{"amount":9.5,"currencyCode":"ZAR"},"messages":[]}
                                             }

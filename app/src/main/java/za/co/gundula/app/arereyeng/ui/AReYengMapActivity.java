@@ -52,7 +52,6 @@ public class AReYengMapActivity extends AppCompatActivity implements LoaderManag
             agency = bundle.getParcelable(agency_key);
         }
 
-
         toolbar.setTitle(getResources().getString(R.string.areyeng_map));
         setSupportActionBar(toolbar);
         //noinspection ConstantConditions
@@ -71,9 +70,9 @@ public class AReYengMapActivity extends AppCompatActivity implements LoaderManag
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(AReYengMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Location Permissions")
+                builder.setMessage(getString(R.string.location_permissions))
                         .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.dialog_ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 ActivityCompat.requestPermissions(AReYengMapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.REQUEST_LOCATION);
                             }

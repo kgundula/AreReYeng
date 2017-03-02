@@ -15,8 +15,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.75"
-        android:paddingLeft="@dimen/text_padding"
-        android:paddingRight="@dimen/text_padding">
+        android:paddingStart="@dimen/text_padding"
+        android:paddingEnd="@dimen/text_padding"
+
+        >
 
 
         <TextView

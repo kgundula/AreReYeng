@@ -15,7 +15,7 @@
         android:id="@+id/empty_bus_stop_widget_layout"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:textColor="#ffffff"
+        android:textColor="@color/colorWhite"
         android:textStyle="bold"
         android:text="@string/empty_data"
         android:textSize="20sp"

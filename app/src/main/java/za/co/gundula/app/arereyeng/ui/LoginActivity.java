@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -34,8 +33,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import za.co.gundula.app.arereyeng.utils.Constants;
 import za.co.gundula.app.arereyeng.R;
+import za.co.gundula.app.arereyeng.utils.Constants;
 
 /**
  * A login screen that offers login via email/password.
@@ -267,16 +266,18 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             /* Signed in successfully, get the OAuth token */
             mGoogleAccount = result.getSignInAccount();
             firebaseAuthWithGoogle(mGoogleAccount);
         } else {
             if (result.getStatus().getStatusCode() == GoogleSignInStatusCodes.SIGN_IN_CANCELLED) {
-                showSnackBar("The sign in was cancelled. Make sure you're connected to the internet and try again.");
+
+                showSnackBar(getString(R.string.sign_in_cancel));
             } else {
-                showSnackBar("Error handling the sign in: " + result.getStatus().getStatusMessage());
+
+                String error_message = getString(R.string.sign_in_error) + result.getStatus().getStatusMessage();
+                showSnackBar(error_message);
             }
             mAuthProgressDialog.dismiss();
         }
