@@ -1,15 +1,12 @@
 package za.co.gundula.app.arereyeng.rest;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import za.co.gundula.app.arereyeng.BuildConfig;
-import za.co.gundula.app.arereyeng.utils.Constants;
 
 /**
  * Created by kgundula on 2016/11/04.
@@ -24,12 +21,8 @@ public class WhereIsMyTransportApiClient {
     public static Retrofit getClient(final Context context) {
         if (retrofit == null) {
 
-            SharedPreferences mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-            String token = mSharedPref.getString(Constants.access_token, "");
-            String bearer = mSharedPref.getString(Constants.token_type, "");
-
-            RetrofitInterceptor retrofitInterceptor = new RetrofitInterceptor(token, bearer);
+            RetrofitInterceptor retrofitInterceptor = new RetrofitInterceptor(context);
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -42,7 +35,6 @@ public class WhereIsMyTransportApiClient {
                     .client(httpClient.build())
                     .build();
 
-            //Log.i("Ygritte",httpClient.toString());
 
         }
         return retrofit;

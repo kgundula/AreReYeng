@@ -456,7 +456,7 @@ public class BusFareActivity extends AppCompatActivity {
 
         share_title = journey_from_to;
         journey_duration.setText(estimated_travel_time);
-        fare_type.setText(j_cost);
+        fare_type.setText(fare_description);
 
 
         share_journey_info.setVisibility(View.VISIBLE);
