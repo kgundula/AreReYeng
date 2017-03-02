@@ -87,7 +87,7 @@
     <!-- No Internet -->
     <string name="no_internet">No Internet Connection. Make sure Wi-Fi or cellular data is turned on, then try again.</string>
     <string name="retry_internet">Retry</string>
-    <string name="sign_in_cancel">The sign in was cancelled. Make sure you're connected to the internet and try again.</string>
+    <string name="sign_in_cancel">The sign in was cancelled. Make sure you\'re connected to the internet and try again.</string>
     <string name="sign_in_error">Error handling the sign in: </string>
 
     <!-- Errors -->
@@ -121,5 +121,9 @@
 
     <string name="location_permissions">Location Permissions</string>
     <string name="dialog_ok">OK</string>
+
+    <string name="hours"> Hours</string>
+    <string name="minutes"> Minutes</string>
+    <string name="seconds"> Seconds</string>
 
 </resources>

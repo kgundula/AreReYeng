@@ -2,11 +2,14 @@ package za.co.gundula.app.arereyeng.ui;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -87,6 +90,9 @@ public class BusFareActivity extends AppCompatActivity {
     @BindView(R.id.info_text)
     TextView info_text;
 
+    @BindView(R.id.share_journey_info)
+    FloatingActionButton share_journey_info;
+
     @BindView(R.id.error_message)
     TextView error_message;
 
@@ -137,7 +143,8 @@ public class BusFareActivity extends AppCompatActivity {
     public final static String unit_key = "unit";
     public final static String duration_key = "duration";
 
-
+    public String share_info = "";
+    public String share_title = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +177,17 @@ public class BusFareActivity extends AppCompatActivity {
         if (!"".equals(agency_id)) {
             getFareProducts(agency_id);
         }
+
+        share_journey_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(BusFareActivity.this)
+                        .setType("text/plain")
+                        .setText(share_info)
+                        .getIntent(), share_title));
+            }
+        });
 
     }
 
@@ -417,6 +435,7 @@ public class BusFareActivity extends AppCompatActivity {
         String journey_from_to = from_busstation + " to " + to_busstation;
         detail_journey.setText(journey_from_to);
 
+
         String j_cost = String.format(Locale.ENGLISH, "%10.2f", cost);
         journey_cost.setText(j_cost);
 
@@ -424,14 +443,24 @@ public class BusFareActivity extends AppCompatActivity {
         String estimated_distance = distance_km + " KM";
         journey_distance.setText(estimated_distance);
 
+
         int num_hours = (itenerary_duration % 86400) / 3600;
         int num_minutes = ((itenerary_duration % 86400) % 3600) / 60;
         int num_seconds = ((itenerary_duration % 86400) % 3600) % 60;
 
-        String estimated_travel_time = num_hours + " Hours " + num_minutes + " Minutes " + num_seconds + " Seconds";
+        String estimated_travel_time = num_hours + getString(R.string.hours) + num_minutes + getString(R.string.minutes) + num_seconds + getString(R.string.seconds);
+        share_info += "\n" + journey_from_to;
+        share_info += "\n\n" + estimated_distance;
+        share_info += "\n" + estimated_travel_time;
+        share_info += "\n" + estimated_travel_time;
 
+        share_title = journey_from_to;
         journey_duration.setText(estimated_travel_time);
-        fare_type.setText(fare_description);
+        fare_type.setText(j_cost);
+
+
+        share_journey_info.setVisibility(View.VISIBLE);
+
 
     }
 

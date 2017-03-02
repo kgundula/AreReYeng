@@ -53,4 +53,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
 
     <integer name="num_columns">2</integer>
 
+    <dimen name="fab_press_translation_z">6dp</dimen>
+
 </resources>
