@@ -32,11 +32,6 @@ public class RetrofitInterceptor implements Interceptor {
         String token = mSharedPref.getString(Constants.access_token, "");
         String bearer = mSharedPref.getString(Constants.token_type, "");
 
-        Request.Builder builder = chain.request().newBuilder();
-        builder.addHeader("Authorization", bearer + " " + token);
-        builder.addHeader("Accept", "application/json");
-        return chain.proceed(builder.build());
-
         // Authorization: Bearer eyJ0eXAiOiJ32aQiLCJhbGciOiJSUzI1NiIsIfg1iCI6ImEzck1VZ01Gd8d0UGNsTGE2eUYz...
         Request.Builder builder = chain.request().newBuilder();
         builder.addHeader("Authorization", bearer + " " + token);
