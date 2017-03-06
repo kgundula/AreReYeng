@@ -32,6 +32,37 @@ public class Utility {
         return formatted.substring(0, 19) + "Z";
     }
 
+    /**
+     * @param dateObject value of date
+     * @return formatted date
+     */
+    public static String formatDate(Date dateObject) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("LLL dd, yyyy");
+        return dateFormat.format(dateObject);
+    }
+
+    /**
+     * @param dateObject value of time
+     * @return formatted time
+     */
+    public static String formatTime(Date dateObject) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+        return timeFormat.format(dateObject);
+    }
+
+
+    public static Date getDateFromISOString(String inputDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.ENGLISH);
+        Calendar cal = Calendar.getInstance();
+        try {
+            cal.setTime(dateFormat.parse(inputDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        cal.add(Calendar.DATE, 0);
+
+        return cal.getTime();
+    }
 
     public static String getISODateFromDate(String inputDate) {
 

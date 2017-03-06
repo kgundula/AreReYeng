@@ -448,7 +448,7 @@ public class BusFareActivity extends AppCompatActivity {
         int num_minutes = ((itenerary_duration % 86400) % 3600) / 60;
         int num_seconds = ((itenerary_duration % 86400) % 3600) % 60;
 
-        String estimated_travel_time = num_hours + getString(R.string.hours) + num_minutes + getString(R.string.minutes) + num_seconds + getString(R.string.seconds);
+        String estimated_travel_time = num_hours + " " + getString(R.string.hours) + num_minutes + " " + getString(R.string.minutes) + num_seconds + " " + getString(R.string.seconds);
         share_info += "\n" + journey_from_to;
         share_info += "\n\n" + estimated_distance;
         share_info += "\n" + estimated_travel_time;

@@ -8,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import za.co.gundula.app.arereyeng.R;
+import za.co.gundula.app.arereyeng.utils.Utility;
 
 /**
  * Created by kgundula on 2017/03/01.
@@ -38,8 +41,11 @@ public class FavouritesBusStopRecyclerViewAdapter extends RecyclerView.Adapter<F
 
         if (busStops.moveToPosition(position)) {
 
+
+            Date date = Utility.getDateFromISOString(busStops.getString(2));
+            String formated_date_time = Utility.formatDate(date) + " " + Utility.formatTime(date);
             holder.bus_stop_name.setText(busStops.getString(1));
-            holder.date_created.setText(busStops.getString(2));
+            holder.date_created.setText(formated_date_time);
 
         }
     }

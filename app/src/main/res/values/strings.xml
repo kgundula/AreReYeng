@@ -126,4 +126,8 @@
     <string name="minutes"> Minutes</string>
     <string name="seconds"> Seconds</string>
 
+    <string name="arrival_time">Arrival Time : </string>
+    <string name="departure_time">Departure Time : </string>
+
+
 </resources>

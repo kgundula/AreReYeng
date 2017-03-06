@@ -22,9 +22,9 @@ android {
         }
         release {
             keyAlias AreYengReleaseKey
-            keyPassword AreYengReleaseKeyPassword
+            keyPassword 'admin@areyeng'
             storeFile file('../areyengrelease.jks')
-            storePassword AreYengReleaseKeyPassword
+            storePassword 'admin@areyeng'
 
         }
     }
