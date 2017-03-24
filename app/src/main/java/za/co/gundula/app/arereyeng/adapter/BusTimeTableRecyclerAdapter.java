@@ -2,6 +2,7 @@ package za.co.gundula.app.arereyeng.adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class BusTimeTableRecyclerAdapter extends RecyclerView.Adapter<BusTimeTab
         holder.line_color.setBackgroundColor(Color.parseColor(busLine.getColour()));
         holder.line_name.setText(busLine.getName() + " - " + busLine.getShortName());
 
+        Log.i("Ygritte", busTimeTable.getArrivalTime());
         Date arrivalDate = Utility.getDateFromISOString(busTimeTable.getArrivalTime());
         String arrival_date_time = Utility.formatDate(arrivalDate) + " " + Utility.formatTime(arrivalDate);
 

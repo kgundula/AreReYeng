@@ -41,7 +41,6 @@ public class FavouritesBusStopRecyclerViewAdapter extends RecyclerView.Adapter<F
 
         if (busStops.moveToPosition(position)) {
 
-
             Date date = Utility.getDateFromISOString(busStops.getString(2));
             String formated_date_time = Utility.formatDate(date) + " " + Utility.formatTime(date);
             holder.bus_stop_name.setText(busStops.getString(1));

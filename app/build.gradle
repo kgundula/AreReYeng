@@ -14,14 +14,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
-        debug {
+        /*debug {
             keyAlias 'areyeng'
             keyPassword 'areyeng'
             storeFile file('../areyeng.jks')
             storePassword 'areyeng'
-        }
+        }*/
         release {
-            keyAlias AreYengReleaseKey
+            keyAlias 'areyengrelease'
             keyPassword 'admin@areyeng'
             storeFile file('../areyengrelease.jks')
             storePassword 'admin@areyeng'
@@ -42,11 +42,11 @@ android {
 
     }
     buildTypes {
-        debug {
+        /*debug {
             signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        }*/
         release {
             signingConfig signingConfigs.release
             minifyEnabled false

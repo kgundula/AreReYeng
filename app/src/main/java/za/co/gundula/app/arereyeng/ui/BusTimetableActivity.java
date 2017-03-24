@@ -3,6 +3,7 @@ package za.co.gundula.app.arereyeng.ui;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -193,9 +194,11 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
                         busTimeTableRecyclerAdapter.notifyDataSetChanged();
                         bus_stop_timetable.setAdapter(busTimeTableRecyclerAdapter);
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
                     } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
                         e.printStackTrace();
                     }
 
