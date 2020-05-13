@@ -8,34 +8,36 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.graphics.Palette;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.palette.graphics.Palette;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -273,15 +275,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         drawer_email.setText(user_email);
 
         if (!"".equals(image_url)) {
-            Glide.with(context)
+            Glide.with(this).asBitmap()
                     .load(image_url)
-                    .asBitmap()
                     .transform(new CircleTransform(context))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(new BitmapImageViewTarget(profileImageView) {
+                    .into(new CustomTarget<Bitmap>() {
                         @Override
-                        public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
-                            super.onResourceReady(bitmap, anim);
+                        public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> anim) {
                             Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener() {
                                 @Override
                                 public void onGenerated(Palette palette) {
@@ -290,6 +290,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                     //navigationView.setBackgroundResource(bgColor);
                                 }
                             });
+                        }
+
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
                         }
                     });
         }
