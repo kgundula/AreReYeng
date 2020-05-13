@@ -61,7 +61,7 @@ android {
 }
 
 ext {    
-   androidXSuppportLib = '1.1.0'
+    androidXSuppportLib = '1.1.0'
     playServicesLibVersion = '18.0.0'
     firebaseLibVersion = '19.3.1'
     kotlin_version = '1.3.31'
