@@ -1,13 +1,14 @@
 package za.co.gundula.app.arereyeng.adapter;
 
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Date;
 import java.util.List;
@@ -41,14 +42,11 @@ public class BusTimeTableRecyclerAdapter extends RecyclerView.Adapter<BusTimeTab
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        //Log.i("Ygritte", busTimeTables.get(position).getBusLine().getName());
-
         BusTimeTable busTimeTable = busTimeTables.get(position);
         BusLine busLine = busTimeTables.get(position).getBusLine();
         holder.line_color.setBackgroundColor(Color.parseColor(busLine.getColour()));
         holder.line_name.setText(busLine.getName() + " - " + busLine.getShortName());
 
-        Log.i("Ygritte", busTimeTable.getArrivalTime());
         Date arrivalDate = Utility.getDateFromISOString(busTimeTable.getArrivalTime());
         String arrival_date_time = Utility.formatDate(arrivalDate) + " " + Utility.formatTime(arrivalDate);
 
