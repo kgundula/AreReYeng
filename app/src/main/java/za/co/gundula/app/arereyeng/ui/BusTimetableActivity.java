@@ -187,7 +187,7 @@ public class BusTimetableActivity extends AppCompatActivity implements LoaderMan
                             String bus_line = busBusTimetableJsonObject.getString("line");
                             busLine = bus_timetable_gson.fromJson(bus_line, BusLine.class);
 
-                            busTimeTable.setBusLine(busLine);
+                            busTimeTable.busLine = busLine;
                             busTimeTableList.add(busTimeTable);
                         }
 

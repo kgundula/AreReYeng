@@ -23,7 +23,7 @@ android {
         release {
             keyAlias 'areyengrelease'
             keyPassword 'admin@areyeng'
-            storeFile file('../areyengrelease.jks')
+            storeFile file(AreYengReleaseKey)
             storePassword 'admin@areyeng'
 
         }
@@ -83,6 +83,7 @@ dependencies {
     //Play Services and Firebase
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation "com.google.android.gms:play-services-auth:18.0.0"
+    implementation "com.google.android.gms:play-services-identity:17.0.0"
 
     implementation 'com.google.firebase:firebase-auth:19.3.1'
 
